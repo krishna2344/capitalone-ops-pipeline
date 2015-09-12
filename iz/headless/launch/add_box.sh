@@ -20,6 +20,6 @@ COMMENT
 
 export LOCATION=../provision
 export BOX_NAME=iz-headless
-export BOX_VERSION=01.02.00.00
+export BOX_VERSION=00.01.02.00
 
 vagrant box add --name ${BOX_NAME} --insecure --force ${LOCATION}/${BOX_NAME}-${BOX_VERSION}.box

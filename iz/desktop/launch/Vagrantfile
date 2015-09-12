@@ -63,7 +63,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   #####################################################################
   # Configure IZ desktop workspace
-  Izanamee::Provisioners::ConfigureWorkspaceIZ.provision
+  #Izanamee::Provisioners::ConfigureWorkspaceIZ.provision
 
   #####################################################################
   # Mount the shared folder

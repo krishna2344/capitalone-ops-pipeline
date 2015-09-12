@@ -18,4 +18,4 @@ COMMENT
 
 #!/bin/bash -e
 
-vagrant package --output iz-headless-01.02.00.00.box
+vagrant package --output iz-headless-00.01.02.00.box

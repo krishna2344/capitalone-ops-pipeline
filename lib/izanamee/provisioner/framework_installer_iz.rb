@@ -71,7 +71,7 @@ module Izanamee
         provision_tomcat_8
         provision_npm
         provision_developer_tools
-        provision_user_settings
+        #provision_user_settings
       end
 
       def self.configure_headless
