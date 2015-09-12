@@ -1,0 +1,73 @@
+=begin
+/*************************IZANAMEE-LICENSE-START*********************************
+ * Copyright 2015 CapitalOne, LLC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *************************IZANAMEE-LICENSE-END*********************************/
+=end
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require_relative '../../../lib/izanamee'
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = '2'
+
+# File locations
+HOST_SHARE = '../host-share'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Init Izanamee config
+  Izanamee.config = config
+  Izanamee::VMHelper.guest_os = Izanamee::VMHelper.supported_systems[:ubuntu_trusty]
+
+  #####################################################################
+  # Check proxy settings
+  Izanamee::ProxyHelper.check_for_proxy_envvars
+  Izanamee::ProxyHelper.set_proxyconfig
+
+  #####################################################################
+  # Vagrant box settings
+
+  # Initialize to the base iz-headless image
+  Izanamee.config.vm.box = 'iz-headless'
+
+  #####################################################################
+  # VirtualBox settings
+
+  # Configure VirtualBox startup params
+  Izanamee.config.vm.provider :virtualbox do |vb|
+    vb.name = 'izanamee-iz-headless'
+    vb.memory = 8192
+    vb.cpus = 2
+    # vb.customize ['modifyvm', :id, '--natpf1', '"myAppServer,tcp,,8080,,8080"']
+  end
+
+  # Set up vm tweaks
+  Izanamee::VMHelper.set_natdnsproxy
+  Izanamee::VMHelper.fix_ubuntu_ssh_tty
+
+  #####################################################################
+  # Configure IZ headless workspace
+  Izanamee::Provisioners::ConfigureWorkspaceIZ.provision
+
+  #####################################################################
+  # Mount the shared folder
+  Izanamee::VMHelper.mount_shared_folder
+
+  #####################################################################
+  # Configure dotfiles
+  Izanamee::Provisioners::FrameworkInstallerIZ.configure_dotfiles
+  Izanamee::VMHelper.configure_dotfiles
+
+end

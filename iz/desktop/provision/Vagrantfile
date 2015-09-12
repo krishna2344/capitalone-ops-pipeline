@@ -1,0 +1,78 @@
+=begin
+/*************************IZANAMEE-LICENSE-START*********************************
+ * Copyright 2015 CapitalOne, LLC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *************************IZANAMEE-LICENSE-END*********************************/
+=end
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require_relative '../../../lib/izanamee'
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = '2'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Init Izanamee config
+  Izanamee.config = config
+  Izanamee::VMHelper.guest_os = Izanamee::VMHelper.supported_systems[:ubuntu_trusty]
+
+  #####################################################################
+  # Check proxy settings
+  Izanamee::ProxyHelper.check_for_proxy_envvars
+  Izanamee::ProxyHelper.set_proxyconfig
+
+  #####################################################################
+  # Vagrant box settings
+
+  # Initialize to the gui-base image
+  Izanamee.config.vm.box = Izanamee::VMHelper.guest_os.vagrant_box_name
+
+  #####################################################################
+  # VirtualBox settings
+
+  # Configure VirtualBox startup params
+  Izanamee.config.vm.provider :virtualbox do |vb|
+    vb.name = 'iz-desktop'
+    vb.memory = 8192
+    vb.cpus = 2
+    vb.gui = true
+    # Uncomment to add video acceleration boost
+    # vb.customize ['modifyvm', :id, '--accelerate3d', 'on']
+    # vb.customize ['modifyvm', :id, '--vram', '128']
+    vb.customize ['modifyvm', :id, '--natpf1', '"myAppServer,tcp,,8080,,8080"']
+  end
+
+  # Set up vm tweaks
+  Izanamee::VMHelper.set_natdnsproxy
+  Izanamee::VMHelper.fix_ubuntu_ssh_tty
+
+  #####################################################################
+  # Provision packages required for IZ framework (headless build)
+  Izanamee::Provisioners::FrameworkInstallerIZ.provision_headless
+  Izanamee::Provisioners::FrameworkInstallerIZ.configure_headless
+
+  #####################################################################
+  # Provision packages required for GUI desktop
+  Izanamee::Provisioners::WMInstaller.provision
+
+  #####################################################################
+  # Provision packages required for IZ framework (desktop-based dev tools)
+  Izanamee::Provisioners::FrameworkInstallerIZ.provision_desktop
+  Izanamee::Provisioners::FrameworkInstallerIZ.configure_desktop
+
+  # Purge credentials used to configure image
+  Izanamee::Provisioners.purge_config_credentials
+
+end

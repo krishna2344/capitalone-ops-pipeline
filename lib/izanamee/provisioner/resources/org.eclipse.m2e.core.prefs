@@ -1,0 +1,6 @@
+eclipse.m2.defaultRuntime=maven
+eclipse.m2.globalSettingsFile=/home/vagrant/.m2/settings.xml
+eclipse.m2.runtimes=maven
+eclipse.m2.runtimesNodes/maven/location=/usr/share/apache-maven-3.3.3
+eclipse.m2.runtimesNodes/maven/type=EXTERNAL
+eclipse.preferences.version=1
