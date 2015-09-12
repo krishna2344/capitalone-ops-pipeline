@@ -29,9 +29,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   Izanamee::VMHelper.guest_os = Izanamee::VMHelper.supported_systems[:ubuntu_trusty]
 
   #####################################################################
-  # Check proxy settings
-  Izanamee::ProxyHelper.check_for_proxy_envvars
-  Izanamee::ProxyHelper.set_proxyconfig
+  # Check proxy settings (requires vagrant-proxyconf plugin)
+  #Izanamee::ProxyHelper.check_for_proxy_envvars
+  #Izanamee::ProxyHelper.set_proxyconfig
 
   #####################################################################
   # Vagrant box settings
