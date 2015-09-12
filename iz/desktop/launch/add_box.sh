@@ -20,6 +20,6 @@ COMMENT
 
 export BOX_LOCATION=../provision
 export BOX_NAME=iz-desktop
-export BOX_VERSION=01.02.00.00
+export BOX_VERSION=00.01.02.00
 
 vagrant box add --name ${BOX_NAME} --insecure --force ${BOX_LOCATION}/${BOX_NAME}-${BOX_VERSION}.box
