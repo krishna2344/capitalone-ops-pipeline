@@ -48,8 +48,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure VirtualBox startup params
   Izanamee.config.vm.provider :virtualbox do |vb|
     vb.name = 'izanamee-iz-headless'
-    vb.memory = 8192
-    vb.cpus = 2
+    vb.memory = 4096
+    vb.cpus = 1
     # vb.customize ['modifyvm', :id, '--natpf1', '"myAppServer,tcp,,8080,,8080"']
   end
 
