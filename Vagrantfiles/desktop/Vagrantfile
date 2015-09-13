@@ -1,0 +1,25 @@
+script = <<SCRIPT
+# insert any custom commands you want to run when you perform a 'vagrant up'
+#  this could be something like apt-get install ...
+SCRIPT
+
+Vagrant.configure('2') do |config|
+  config.vm.box = 'izanamee/desktop'
+
+  # recommended system requirements
+  #  these may be changed to suit the needs of your system
+  config.vm.provider 'virtualbox' do |v|
+    v.memory = 8096
+    v.cpus = 2
+    v.gui = true
+    
+    # Uncomment to add video acceleration boost for GUI desktop
+    # v.customize ['modifyvm', :id, '--accelerate3d', 'on']
+    # v.customize ['modifyvm', :id, '--vram', '128']
+    
+    # Uncomment to add port-forwarding (Example NAT format for vb)
+    # v.customize ['modifyvm', :id, '--natpf1', '"myAppServer,tcp,,8080,,8080"']
+  end
+
+  config.vm.provision 'shell', inline: script
+end

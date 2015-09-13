@@ -1,24 +1,134 @@
-<img src="izanamee-logo.png" width="400" alt="izanamee"/>
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-### Environment setup done right!
+<img src="izanamee-logo.png" width="400" alt="izanamee" />
 
-#### Izanamee installation instructions
+Izanamee is a set of virtual machines based on a similar family used internally
+at Capital One for layered Java development environments.  We are contributing
+these  to the Open Source community and to help facilitate a quick-start, level
+playing field for hack-a-thons.  
 
-1. System requirements
-  * Desktop: 16Gb RAM/20Gb SSD free
-  * Headless: 8Gb RAM/5Gb SSD free
+# Background
+Capital One needed to provide a consistent way in getting development teams
+setup in the layered environments we support and to automate consistent
+assemblies from instructions which in some cases spanned multiple pages and
+hundreds of line-item steps.  As we all can attest, this methodology is fragile
+and brittle at best.
 
-2. Install instructions for dependencies (vagrant, virtualbox):
-  * __Mac OSX__: We recommend doing this via [Homebrew] (http://brew.sh/), i.e.
-    * `brew update && brew cask install vagrant virtualbox`
-    (if you do not have cask installed, run `brew install caskroom/cask/brew-cask`)
+With open source tools such as [Vagrant](https://www.vagrantup.com/),
+we have been able to revolutionize the way we could provide and support
+development environments across the enterprise; culturally, with this approach,
+we have also been able to seed a DevOps mentality earlier.
 
-  * __Windows__: We recommend doing this via [Chocolatey] (https://chocolatey.org/), i.e.
-    - `choco install vagrant virtualbox`
-    - NOTE: if you have previously installed virtualbox manually, run the .msi installer and uninstall it if you would like to use choco going forward (recommended for non-managed desktops)
-3. Clone this repo locally with git (if you do not have git installed, you may brew or choco install it as well)
+Izanamee derives its name from the Japanese goddess (_Izanami-no-Mikoto_) of
+both creation and death.  We chose it as a nod to the power and flexibility that
+`vagrant up` and `vagrant destroy` provides us.  Hats off to Mitchell
+Hashimoto and the team at [Hashicorp] (https://www.hashicorp.com) for creating
+and supporting this terrific tool.
 
-4. First `vagrant up` to provision and register a VM image: you will need to build the desired image from the provision directory and then add the resulting .box file to your local vagrant registry.  This takes approximately 30 minutes for the desktop image and 5 minutes for the headless image.
+# Izanamee Family of Virtual Machines
 
-5. Second `vagrant up` to create an VM instance from a registered VM image: cd to the launch sub-directory for the desired image you've already registered and run `vagrant up`.  The first time you launch, a VM instance is created in VirtualBox (requiring at most a couple minutes).
-  * Subsequent launches of `vagrant up` re-use the instance in mere seconds of startup time...and you can always `vagrant destroy` the image to recover space or flush a corrupted instance, and restart a brand new VM instance from the registered VM image using the by now familiar `vagrant up`.
+There are currently two virtual machine images built from a base of
+__ubunty/trusty64 (14.04)__:
+
+* __Headless (No GUI, 1Gb image)__:
+ * Docker
+ * Git & Subversion
+ * Node/NPM
+ * Oracle 7 & 8 JDK
+ * Maven & Gradle
+ * Tomcat 7 & 8
+
+* __Desktop (GUI, 2Gb image)__:
+ * Inventory of Headless +
+ * Xubuntu desktop
+ * Spring Tool Suite (STS) IDE & relevant plugins
+ * Firefox
+ * Chrome
+
+# System Requirements
+
+Here are the prerequisites which you'll first need to install before you can
+begin using the Izanamee family of virtual machines:
+
+* __Manual Install__:
+  * [Git](https://git-scm.com/downloads)
+  * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+  * [Vagrant](https://www.vagrantup.com/downloads.html)
+* __Mac OSX__ via [Homebrew](http://brew.sh/):
+  ```
+  $ # if Homebrew is not installed
+  $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+  $ # update Homebrew if it was already installed
+  $ brew update
+
+  $ # if Cask is not installed
+  $ brew install caskroom/cask/brew-cask
+
+  $ # if Git is not installed
+  $ brew install git
+
+  $ # installs Vagrant & VirtualBox
+  $ brew cask install vagrant virtualbox
+  ```
+* __Windows__ via [Chocolatey](https://chocolatey.org/):
+
+  __NB:__ If you have previously installed Git, Vagrant & VirtualBox via
+  the .msi installer, you may need to uninstall it if you would like to use
+  Chocolatey going forward which is recommended for non-managed desktops.
+
+  To install Chocolatey, open an administrative cmd.exe command prompt:     
+  ```
+  C:\> @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex
+  ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"
+  && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
+  ```
+
+  To install dependencies, open a non-privileged cmd.exd command prompt:
+  ```
+  C:\> REM installs Git, Vagrant & VirtualBox
+  C:\> choco install git.install vagrant virtualbox
+  ```
+
+# How to Install the Izanamee Virtual Machines
+The recommended pattern for installing and using an Izanamee virtual machine is
+to copy the provided Vagrantfile into the base of your own GitHub repository.
+
+1. Create a GitHub repository
+2. Execute the steps below substituting _ghuser_ for your GitHub
+   username and _your_repo_ for the repository you created:
+
+   ```
+   $ git clone https://github.com/ghuser/your_repo.git
+   $ cd your_repo
+
+   $ # if you want to use the headless image, execute the following
+   $ curl -O https://github.com/capitalone/Izanamee/Vagrantfiles/headless/Vagrantfile
+
+   $ # if you want to use the desktop image, execute the following
+   $ curl -O https://github.com/capitalone/Izanamee/Vagrantfiles/desktop/Vagrantfile
+
+   $ vagrant up
+   $ vagrant ssh
+   ```
+3. If you have chosen the desktop image, the login credentials for the GUI are
+   username: `vagrant` and password: `vagrant`.
+
+The Vagrantfile goes into the base of your project because Vagrant will sync the
+current working directory to the `/vagrant` directory inside of the Izanamee
+Virtual Machine.  This means you can continue to work on files on your host
+machine and they will automatically be available within the Izanamee virtual
+machine.  This is especially useful in the case of working on the headless
+image as you can continue to use GUI IDEs for development.  Additionally, you
+can execute `git` commands and they will work the same on your host machine and
+within the Izanamee virtual machine.  
+
+# FAQ
+FAQs are hosted on our wiki at https://github.com/capitalone/Izanamee/wiki/FAQ
+
+# Acknowledgements
+
+* __Core Team__: Brent Vukmer, Etienne LaVallee & Keith Gasser
+* __Executive Sponsors__: Jeff Elgin, Kranthi Dandamudi, Joelle Rowley & Darren McMahon
+* __OSS Support__: Al Sell
+* __Key Contributors__: Larry Rosenzweig & Marshall Thompson
