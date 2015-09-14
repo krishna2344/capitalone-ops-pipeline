@@ -45,7 +45,23 @@ __ubunty/trusty64 (14.04)__:
  * Firefox
  * Chrome
 
-# System Requirements
+# Host System Requirements
+
+* __Headless__: 
+ * For Docker and/or Java development, we recommend having at least 8Gb RAM on your host 
+    device as we allocate 4Gb RAM by default.
+ * Less RAM is needed for microservices development in languages like Node, Python or Go.
+    Tune this setting in the Vagrantfile.
+ * We generally recommend having 10-20Gb free disk.
+
+* __Desktop__:
+ * For Docker and/or Java development, we recommend having at least 16Gb RAM on your host 
+    device as we allocate 8Gb RAM by default.
+ * Less RAM is needed for microservices development in languages like Node, Python or Go.
+    Tune this setting in the Vagrantfile.
+ * We generally recommend having 15-25Gb free disk.
+ * If you are running a supporting GPU, we recommend trying the 3-d acceleration settings
+    available in VirtualBox (see the Vagrantfile).
 
 Here are the prerequisites which you'll first need to install before you can
 begin using the Izanamee family of virtual machines:
