@@ -45,6 +45,8 @@ __ubunty/trusty64 (14.04)__:
  * Firefox
  * Chrome
 
+For specifics on package versions, please visit the [Release History](https://github.com/capitalone/Izanamee/releases).
+
 # Host System Requirements
 
 * __Headless__: 
