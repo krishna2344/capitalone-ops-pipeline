@@ -121,10 +121,10 @@ to copy the provided Vagrantfile into the base of your own GitHub repository.
    $ cd your_repo
 
    $ # if you want to use the headless image, execute the following
-   $ curl -O https://github.com/capitalone/Izanamee/Vagrantfiles/headless/Vagrantfile
+   $ curl -O https://raw.githubusercontent.com/capitalone/Izanamee/master/Vagrantfiles/headless/Vagrantfile?token=ABZj9WL2vOFlvO4Gi7z2hqyHu8Q73Dguks5WAE0twA%3D%3D
 
    $ # if you want to use the desktop image, execute the following
-   $ curl -O https://github.com/capitalone/Izanamee/Vagrantfiles/desktop/Vagrantfile
+   $ curl -O https://raw.githubusercontent.com/capitalone/Izanamee/master/Vagrantfiles/desktop/Vagrantfile?token=AF4U4RIeYerstupN8at4XGqpRRO4B3gIks5WADiuwA%3D%3D
 
    $ vagrant up
    $ vagrant ssh
