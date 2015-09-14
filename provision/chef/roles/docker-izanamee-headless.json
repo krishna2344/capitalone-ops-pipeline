@@ -1,0 +1,57 @@
+{
+  "name": "izanamee-headless",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The base role for a headless izanamee",
+  "default_attributes": {
+    "tz": "US/Eastern",
+    "users": [
+      "vagrant"
+    ],
+    "packages": [
+      "bash",
+      "ksh",
+      "subversion",
+      "git",
+      "libsvn-java",
+      "unzip",
+      "dos2unix",
+      "python-software-properties"
+    ],
+    "gradle": {
+      "version": "1.12",
+      "home": "/usr/local/gradle"
+    },
+    "maven": {
+      "version": "3",
+      "setup_bin": "true",
+      "install_java": "false",
+      "m2_home": "/usr/local/maven",
+      "3": {
+        "version": "3.3.3",
+        "url": "http://mirrors.sonic.net/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz",
+        "checksum": "3a8dc4a12ab9f3607a1a2097bbab0150c947ad6719d8f1bb6d5b47d0fb0c4779"
+      }
+    },
+    "java": {
+      "install_flavor": "oracle",
+      "jdk_version": "7",
+      "set_default": false,
+      "set_etc_environment": false,
+      "oracle": {
+        "accept_oracle_download_terms": "true"
+      }
+    }
+  },
+  "run_list": [
+    "recipe[apt::default]",
+    "recipe[packages]",
+    "recipe[java_install]",
+    "recipe[user::data_bag]",
+    "recipe[maven]",
+    "recipe[nodejs]",
+    "recipe[gradle]",
+    "recipe[timezone_lwrp]",
+    "recipe[configure_headless]"
+  ]
+}

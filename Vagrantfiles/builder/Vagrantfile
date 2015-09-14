@@ -1,0 +1,43 @@
+
+cfg = {}
+cfg[:cpus]        ||= "2"
+cfg[:memory]      ||= "4096"
+cfg[:gui]         ||= false
+cfg[:box]         ||= "izanamee/headless"
+cfg[:nfs]         ||= true
+
+Vagrant.configure(2) do |config|
+  config.vm.box = cfg[:box]
+  config.vm.synced_folder ".", "/vagrant", type: "nfs" if cfg[:nfs]
+
+  config.vm.define "builder" do |vmconfig|
+
+    vmconfig.vm.provider "vmware_fusion" do |v|
+      v.vmx["numvcpus"] = cfg[:cpus]
+      v.vmx["memsize"]  = cfg[:memory]
+      v.gui = cfg[:gui]
+      v.vmx["vhv.enable"] = "TRUE"
+    end
+
+    vmconfig.vm.provider 'vmware_appcatalyst' do |v|
+      v.vmx['numvcpus'] = cfg[:cpus]
+      v.vmx['memsize']  = cfg[:memory]
+      v.gui = "false"
+      v.vmx["vhv.enable"] = "TRUE"
+    end
+  end
+
+  config.berkshelf.enabled = true
+  config.vm.provision "chef_solo" do |chef|
+    chef.json = {
+      "vmware_workstation" => {
+        "serial_number" => "this-should-be-a-valid-serial-number"
+      }
+    }
+    chef.roles_path = 'provision/chef/roles'
+    chef.data_bags_path = "provision/chef/data_bags"
+    chef.add_role 'jenkins-master'
+    chef.add_role 'izanamee-headless'
+  end
+
+end

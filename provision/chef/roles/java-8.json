@@ -1,0 +1,31 @@
+{
+  "name": "java-8",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "install oracle java-8",
+  "default_attributes": {
+    "java": {
+      "install_flavor": "oracle",
+      "jdk_version": "8",
+      "set_etc_environment": "true",
+      "oracle": {
+        "accept_oracle_download_terms": "true"
+      },
+      "jdk": {
+        "7": {
+          "x86_64": {
+            "url": "http://download.oracle.com/otn/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz"
+          },
+          "8": {
+            "x86_64": {
+              "url": "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.tar.gz"
+            }
+          }
+        }
+      }
+    }
+  },
+  "run_list": [
+    "recipe[java]"
+  ]
+}

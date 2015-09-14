@@ -1,0 +1,30 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 768
+
+provisioner:
+  name: chef_solo
+  roles_path: provision/chef/roles
+  data_bags_path:  provision/chef/data_bags
+  cookbook_path:
+    - provision/chef/cookbooks
+    - provision/chef/vendor-cookbooks
+
+platforms:
+  - name: ubuntu-trusty-virtualbox
+    driver:
+      box: tompscanlan/headless
+      box_url: https://atlas.hashicorp.com/tompscanlan/boxes/headless
+      provider: virtualbox
+
+suites:
+  - name: desktop
+    run_list:
+      - role[izanamee-desktop]
+    attributes:
+  - name: headless
+    run_list:
+      - role[izanamee-headless]
+    attributes:

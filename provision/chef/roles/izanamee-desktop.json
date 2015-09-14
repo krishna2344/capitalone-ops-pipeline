@@ -1,0 +1,17 @@
+{
+  "name": "izanamee-headless",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The base role for a headless izanamee",
+  "default_attributes": {
+  },
+  "run_list": [
+    "recipe[apt::default]",
+    "role[izanamee-headless]",
+    "recipe[xubuntu-desktop-pkg]",
+    "recipe[spring_tool_suite]",
+    "recipe[firefox]",
+    "recipe[install_chrome]",
+    "recipe[configure_desktop]"
+  ]
+}
