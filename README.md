@@ -2,7 +2,8 @@
 
 <img src="izanamee-logo.png" width="400" alt="izanamee" />
 
-Izanamee is a set of virtual machines based on a similar family used internally
+Project "Izanamee" (internal working title, external branding tbd) is a set 
+of virtual machines based on a similar family used internally
 at Capital One for layered Java development environments.  We are contributing
 these  to the Open Source community and to help facilitate a quick-start, level
 playing field for hack-a-thons.  
