@@ -151,4 +151,4 @@ FAQs are hosted on our wiki at https://github.com/capitalone/Izanamee/wiki/FAQ
 * __Core Team__: Brent Vukmer, Etienne LaVallee & Keith Gasser
 * __Executive Sponsors__: Jeff Elgin, Kranthi Dandamudi, Joelle Rowley & Darren McMahon
 * __OSS Support__: Al Sell
-* __Key Contributors__: Larry Rosenzweig & Marshall Thompson
+* __Key Contributors__: Harish Patel, Larry Rosenzweig & Marshall Thompson
