@@ -5,7 +5,7 @@
 Project "Izanamee" (internal working title, external branding tbd) is a set 
 of virtual machines based on a similar family used internally
 at Capital One for layered Java development environments.  We are contributing
-these  to the Open Source community and to help facilitate a quick-start, level
+these  to the Open Source community to help facilitate a quick-start, level
 playing field for hack-a-thons.  
 
 # Background
@@ -24,7 +24,8 @@ Izanamee derives its name from the Japanese goddess (_Izanami-no-Mikoto_) of
 both creation and death.  We chose it as a nod to the power and flexibility that
 `vagrant up` and `vagrant destroy` provides us.  Hats off to Mitchell
 Hashimoto and the team at [Hashicorp] (https://www.hashicorp.com) for creating
-and supporting this terrific tool.
+and supporting this terrific tool, and for hosting the [Atlas](https://atlas.hashicorp.com/izanamee)
+public registry of Vagrant images where we are able publish our images. 
 
 # Izanamee Family of Virtual Machines
 
@@ -114,18 +115,18 @@ The recommended pattern for installing and using an Izanamee virtual machine is
 to copy the provided Vagrantfile into the base of your own GitHub repository.
 
 1. Create a GitHub repository
-2. Execute the steps below substituting _ghuser_ for your GitHub
-   username and _your_repo_ for the repository you created:
+2. Execute the steps below substituting _ghuser_ with your GitHub
+   username and _your_repo_ with the name of the repository you created:
 
    ```
    $ git clone https://github.com/ghuser/your_repo.git
    $ cd your_repo
 
    $ # if you want to use the headless image, execute the following
-   $ curl -O https://raw.githubusercontent.com/capitalone/Izanamee/master/Vagrantfiles/headless/Vagrantfile?token=ABZj9WL2vOFlvO4Gi7z2hqyHu8Q73Dguks5WAE0twA%3D%3D
+   $ curl -O https://raw.githubusercontent.com/capitalone/Izanamee/master/Vagrantfiles/headless/Vagrantfile?token=ABZj9WL2vOFlvO4Gi7z2hqyHu8Q73Dguks5WAE0twA%3D%3D -o Vagrantfile
 
    $ # if you want to use the desktop image, execute the following
-   $ curl -O https://raw.githubusercontent.com/capitalone/Izanamee/master/Vagrantfiles/desktop/Vagrantfile?token=AF4U4RIeYerstupN8at4XGqpRRO4B3gIks5WADiuwA%3D%3D
+   $ curl -O https://raw.githubusercontent.com/capitalone/Izanamee/master/Vagrantfiles/desktop/Vagrantfile?token=AF4U4RIeYerstupN8at4XGqpRRO4B3gIks5WADiuwA%3D%3D -o Vagrantfile
 
    $ vagrant up
    $ vagrant ssh
