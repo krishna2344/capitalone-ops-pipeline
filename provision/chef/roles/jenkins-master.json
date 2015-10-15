@@ -13,21 +13,11 @@
       "python-software-properties"
     ],
     "jenkins-master":{
-      "users": {
-          "jenkins": {
-            "id": "fa3aab48-4edc-446d-b1e2-1d89d86f1234",
-            "description": "jenkins admin",
-            "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA1V9b9oCPaFZT2ZSewx0U/Il7ieTzjtR0jQrArjiNAC08uvkI\neJcIMkmkmzXgPzqlQ9Wa8g3d3GstaA/y2UCw/TKI1F12Q3/pfF4f9O49Fd5563AZ\nUPr5ayB1WBuRcc0kAL1pOtlOHHPLgOyUqdqm4xLXEyi7HaxkjeUqbQJiwrk7Empa\nR/kQydhpdNS1mjsX2yeFsHugKvuY2EyzcCo7UQo2t4+gPv+BFp5CNY2RL6jqmp0M\nzKGJrnW3C7v1nVBKeGFAQzdOvs/X4R+tuFJ+FgK7b6jcZeo0CfiHGbBvO8MF7ZRj\nNk75yCQdqdCeYfWMlrOgvzPHOnRKbsDU+eGiNwIDAQABAoIBAQCfeTQsmo2Ud+EX\nn+LBBX1n+gFhYMNAnz21JLI6BH4uAaGARRy1tHwlybDDaJL/7v8SIhY6j26gjWJU\ngocJJTajJx/pSSlY7cM+dsL/twfkznDlLNVfFxVPoeTSQ1iDa8Va4DZEC6I71bfl\n1eyOvqM42B3zbd/cH7rP6tW4v628xoLrEND5StQRf0vgYcGi8KmW0eTmz3GpGvt8\nsSJeVyZfxE/UKuotRekOAFJDRBwXlBNclDLDIZ7ti9JVVqLUKGDP8J+BOJa/hrv7\n1dlbXEUKIUVK23tGTSBbCYI0gDSwU5FkZGj5Bp0pYWBdp7QDxTkLAiLEnT01ytUV\n2Mr3/dihAoGBAPKa4v6B3We7Tf0qPVJtueE0z4OLpcfmevQtA/UI8bnsIDUe6kU+\ngn56McjseDC+9i4JA7pFne1p1nyPmVjb+8I97Fq9cE8Mn+oFlubLlel6myOlmmAE\nWgqbGgkZOuA4eKeXw6o3zyR2kqN8HdUkdkIb/fTDJRgN4X2ti3VflKiJAoGBAOEn\nSKmK0hjGW1t0HKPMzBLktT+9GYjoK1204xWlKqmEjRqLbf7b/JMfKQ/pqxB/qm6h\nDOxtgdlLxI5c2vUWe6bn3IStkhuSt2vPoSA6MakSUyPIgWn24SryqLIL3HCE6iGA\nAQHtKQg2o5U27YhcwVEwV5ZP3jco74WutSent8S/AoGAGEET4I3rLKu1KFJIvyzp\nIHK/LE+Ry2JneHHnq1+xivzoW2cz1KhjM3HT+FprybPNuNx92umK2Gl0YA+bLR8R\nFGJMduXpjH2eny7f30MLQcRYLkAoJuFIfzbya2ZyVGhQ57Bsh1/8/ZA9KMsH0H9M\ns19JDGdWFgmNOZtYDev4WMECgYEA2i+sbYf2Y0XNgEl7+4vZ8zEpJ3RDy3VZmPxS\n10Xwmse1yZR2anSaRaP7scz6FgnxijWNhYv1OjL/bgozsTAxcaPdAcIGBaxfDR3v\nAYEDYNk+Mj36k0pIF8uBiNCPtYZIMWCPGWPO0IPKcC4Db5KbT+ct6Z7KM9/6hSyx\nppUUM5cCgYAO9WSCxpVkqsFHwj9ppmcLWoTbwZuq8fd8GcdxW/dejqHqIa20qIYv\nQ7XKnOgpRt6KeSPDtcCJcJyySOmzgdPXSsz8556QR5EZaSXz2dI6jxHulRNzJ04K\nxDow502ywkbESHE0XrhmaA3yKFRU1KAymJAULzFzztYEgquMvxBS1w==\n-----END RSA PRIVATE KEY-----",
-            "public_keys":[
-              "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVX1v2gI9oVlPZlJ7DHRT8iXuJ5POO1HSNCsCuOI0ALTy6+Qh4lwgySaSbNeA/OqVD1ZryDd3cay1oD/LZQLD9MojUXXZDf+l8Xh/07j0V3nnrcBlQ+vlrIHVYG5FxzSQAvWk62U4cc8uA7JSp2qbjEtcTKLsdrGSN5SptAmLCuTsSalpH+RDJ2Gl01LWaOxfbJ4Wwe6Aq+5jYTLNwKjtRCja3j6A+/4EWnkI1jZEvqOqanQzMoYmudbcLu/WdUEp4YUBDN06+z9fhH624Un4WArtvqNxl6jQJ+IcZsG87wwXtlGM2TvnIJB2p0J5h9YyWs6C/M8c6dEpuwNT54aI3 jenkins@packer-vmware-iso"
-            ]
-          }
-        },
-
+      "admin_private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA1V9b9oCPaFZT2ZSewx0U/Il7ieTzjtR0jQrArjiNAC08uvkI\neJcIMkmkmzXgPzqlQ9Wa8g3d3GstaA/y2UCw/TKI1F12Q3/pfF4f9O49Fd5563AZ\nUPr5ayB1WBuRcc0kAL1pOtlOHHPLgOyUqdqm4xLXEyi7HaxkjeUqbQJiwrk7Empa\nR/kQydhpdNS1mjsX2yeFsHugKvuY2EyzcCo7UQo2t4+gPv+BFp5CNY2RL6jqmp0M\nzKGJrnW3C7v1nVBKeGFAQzdOvs/X4R+tuFJ+FgK7b6jcZeo0CfiHGbBvO8MF7ZRj\nNk75yCQdqdCeYfWMlrOgvzPHOnRKbsDU+eGiNwIDAQABAoIBAQCfeTQsmo2Ud+EX\nn+LBBX1n+gFhYMNAnz21JLI6BH4uAaGARRy1tHwlybDDaJL/7v8SIhY6j26gjWJU\ngocJJTajJx/pSSlY7cM+dsL/twfkznDlLNVfFxVPoeTSQ1iDa8Va4DZEC6I71bfl\n1eyOvqM42B3zbd/cH7rP6tW4v628xoLrEND5StQRf0vgYcGi8KmW0eTmz3GpGvt8\nsSJeVyZfxE/UKuotRekOAFJDRBwXlBNclDLDIZ7ti9JVVqLUKGDP8J+BOJa/hrv7\n1dlbXEUKIUVK23tGTSBbCYI0gDSwU5FkZGj5Bp0pYWBdp7QDxTkLAiLEnT01ytUV\n2Mr3/dihAoGBAPKa4v6B3We7Tf0qPVJtueE0z4OLpcfmevQtA/UI8bnsIDUe6kU+\ngn56McjseDC+9i4JA7pFne1p1nyPmVjb+8I97Fq9cE8Mn+oFlubLlel6myOlmmAE\nWgqbGgkZOuA4eKeXw6o3zyR2kqN8HdUkdkIb/fTDJRgN4X2ti3VflKiJAoGBAOEn\nSKmK0hjGW1t0HKPMzBLktT+9GYjoK1204xWlKqmEjRqLbf7b/JMfKQ/pqxB/qm6h\nDOxtgdlLxI5c2vUWe6bn3IStkhuSt2vPoSA6MakSUyPIgWn24SryqLIL3HCE6iGA\nAQHtKQg2o5U27YhcwVEwV5ZP3jco74WutSent8S/AoGAGEET4I3rLKu1KFJIvyzp\nIHK/LE+Ry2JneHHnq1+xivzoW2cz1KhjM3HT+FprybPNuNx92umK2Gl0YA+bLR8R\nFGJMduXpjH2eny7f30MLQcRYLkAoJuFIfzbya2ZyVGhQ57Bsh1/8/ZA9KMsH0H9M\ns19JDGdWFgmNOZtYDev4WMECgYEA2i+sbYf2Y0XNgEl7+4vZ8zEpJ3RDy3VZmPxS\n10Xwmse1yZR2anSaRaP7scz6FgnxijWNhYv1OjL/bgozsTAxcaPdAcIGBaxfDR3v\nAYEDYNk+Mj36k0pIF8uBiNCPtYZIMWCPGWPO0IPKcC4Db5KbT+ct6Z7KM9/6hSyx\nppUUM5cCgYAO9WSCxpVkqsFHwj9ppmcLWoTbwZuq8fd8GcdxW/dejqHqIa20qIYv\nQ7XKnOgpRt6KeSPDtcCJcJyySOmzgdPXSsz8556QR5EZaSXz2dI6jxHulRNzJ04K\nxDow502ywkbESHE0XrhmaA3yKFRU1KAymJAULzFzztYEgquMvxBS1w==\n-----END RSA PRIVATE KEY-----",
+      "admin_public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVX1v2gI9oVlPZlJ7DHRT8iXuJ5POO1HSNCsCuOI0ALTy6+Qh4lwgySaSbNeA/OqVD1ZryDd3cay1oD/LZQLD9MojUXXZDf+l8Xh/07j0V3nnrcBlQ+vlrIHVYG5FxzSQAvWk62U4cc8uA7JSp2qbjEtcTKLsdrGSN5SptAmLCuTsSalpH+RDJ2Gl01LWaOxfbJ4Wwe6Aq+5jYTLNwKjtRCja3j6A+/4EWnkI1jZEvqOqanQzMoYmudbcLu/WdUEp4YUBDN06+z9fhH624Un4WArtvqNxl6jQJ+IcZsG87wwXtlGM2TvnIJB2p0J5h9YyWs6C/M8c6dEpuwNT54aI3 jenkins@packer-vmware-iso",
+      "admin_email": "tscanlan@vmware.com",
       "plugins": [
         "ansicolor",
-        "build-blocker-plugin",
-        "build-pipeline-plugin",
         "build-user-vars-plugin",
         "checkstyle",
         "conditional-buildstep",
