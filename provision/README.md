@@ -3,45 +3,10 @@
 
 There are 2 main ways to go about building more future Izanamee revisions.
 
-1. Leverage [Atlas](https://atlas.hashicorp.com/) to build and host boxes
-2. Stand up a local VMware vm with tools to build the VMs and manage
+1. Stand up a local VMware vm with tools to build the VMs and manage
    your own vagrant version catalog
+1. Leverage [Atlas](https://atlas.hashicorp.com/) to build and host boxes
 
-## Leverage Atlas
-
-### Atlas high level workflow
-The builds intended for Atlas are at `packer/headless.json` and `packer/desktop.json`.
-Running `packer push` with those will
-
-1. send the packer configuration and all needed provisioning tools
-1. install a base vm from iso
-1. add guest tools
-1. provision as either headless or desktop
-1. package boxes for VMware and virtualbox
-1. upload those boxes to Atlas
-
-### Actual steps for pushing to Atlas
-
-1. Get an account at [Atlas](https://atlas.hashicorp.com/)
-
-2. Run the following to bring up a vm with the right tools for packer
-
-        $ git clone git@github.com:capitalone/Izanamee.git
-        $ cp Vagrantfiles/builder/Vagrantfile .
-        $ # the provider could also be vmware_workstation
-        $ # or vmware_appcatalyst for your OS
-        $ vagrant up --provider=vmware_fusion
-        $ berks vendor provision/chef/vendor-cookbooks
-
-3. push the build to Atlas
-
-        $ vagrant ssh
-        $ cd /vagrant
-        $ # get this token from Atlas website, settings, tokens
-        $ export ATLAS_TOKEN=9NS.....xxxxx
-        $ packer push packer/headless.json
-        $ # this returns after uploading the local tree to atlas
-        $ # check Atlas to see when build is complete
 
 ## Build your own build server for building VMs
 
@@ -100,6 +65,34 @@ You may need to install some of the following vagrant plugins to get everything 
         $ vagrant box add --force --name izanamee/headless headless-vmware-iso-${version}.box
         $ vagrant box add --force --name izanamee/headless headless-virtualbox-iso-${version}.box
 
+## Leverage Atlas
+
+### Atlas high level workflow
+The builds intended for Atlas are at `packer/headless.json` and `packer/desktop.json`.
+Running `packer push` with those will run a buils remotely on atlas.
+
+### Actual steps for pushing to Atlas
+
+1. Get an account at [Atlas](https://atlas.hashicorp.com/)
+
+1. Create and save an api token (under settings)
+
+1. [install packer](http://www.packer.io/intro/getting-started/setup.html)
+
+1. clone source
+
+        git clone git@github.com:capitalone/Izanamee.git
+
+1. copy all chef recipes into place for shipping to atlas
+
+        berks vendor provision/chef/vendor-cookbooks
+
+1. push the build to Atlas
+
+        export ATLAS_TOKEN=9NS.....xxxxx
+        packer push packer/headless.json
+        # this returns after uploading the local tree to atlas
+        # check Atlas to see when build is complete
 
 ## setting up an internal box repo:
 
