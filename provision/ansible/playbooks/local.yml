@@ -1,0 +1,8 @@
+---
+- hosts: all
+  vars:
+    ansible_additional_packages:
+      - vim
+  tasks:
+    - name: testing
+      command: ls /

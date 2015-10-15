@@ -1,0 +1,80 @@
+{
+  "variables": {
+    "box_name": "izanamee/headless",
+    "iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.3-server-amd64.iso",
+    "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+    "iso_checksum_type": "md5",
+    "version": null,
+    "memory": "512",
+    "cpu": "1",
+    "headless": "true"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "boot_wait": "10s",
+      "source_path": "base-virtualbox/packer-virtualbox-iso.ovf",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "headless": "{{user `headless`}}",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `memory`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{user `cpu`}}"
+        ]
+      ]
+    },
+    {
+      "type": "vmware-vmx",
+      "boot_wait": "10s",
+      "source_path": "base-vmware/packer-vmware-iso.vmx",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "tools_upload_flavor": "linux",
+      "tools_upload_path": "{{.Flavor}}.iso",
+      "headless": "{{user `headless`}}",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpu`}}",
+        "mks.3denable": false
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "provision/chef/cookbooks",
+        "provision/chef/vendor-cookbooks"
+      ],
+      "data_bags_path": "provision/chef/data_bags",
+      "roles_path": "provision/chef/roles",
+      "run_list": [
+        "role[izanamee-headless]"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "izanamee-headless-{{.BuildName}}-{{user `version`}}.box",
+      "keep_input_artifact": true
+    }
+  ]
+}

@@ -3,3 +3,16 @@
 *.box
 .vagrant
 *.iml
+/provision/chef/vendor-cookbooks/
+/Berksfile.lock
+/Vagrantfile
+/packer_cache
+/output-virtualbox-iso
+/output-vmware-iso
+/packer_cache
+/base-virtualbox
+/base-vmware
+/.kitchen
+/output-virtualbox-ovf
+/output-vmware-vmx
+/jenkins
