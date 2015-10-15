@@ -48,6 +48,21 @@ Running `packer push` with those will
 This requires that you have a VMware hypervisor.  Virtualbox doesn't fully
 support nested vms.
 
+
+### installing needed packages and vagrant plugins
+You may need to install some of the following vagrant plugins to get everything working:
+
+
+    # needed for chef provisioning
+    vagrant plugin install vagrant-berkshelf
+    brew cask install chefdk # needs to be in sync with the vagrant plugin version
+
+    # one of the following based on provider
+    vagrant plugin install vagrant-vmware-fusion
+    vagrant plugin install vagrant-vmware-workstation
+    vagrant plugin install vagrant-vmware-appcatalyst
+
+
 *Note, you'll need to manually set VMware Workstation to use a trial license,
  or set a real license number in the jenkins-master attributes.  Get into
  the desktop, and run Workstation once to set the license.  Alternativly, you can
