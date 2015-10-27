@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1.10.1">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.10.1">
+    <script>env.version = &quot;2.1.${env.BUILD_NUMBER}&quot;
+
+stage &apos;checkout&apos;
+  node {
+    git url: &apos;git@github.com:capitalone/Izanamee.git&apos;, credentialsId: &apos;1e13511b-a440-4850-870d-e06ab4b1e06e&apos;
+    stash includes: &apos;**&apos;, excludes: &apos;*.box,provision/chef/vendor-cookbooks/**,packer_cache/**,output-virtualbox-iso/**,output-vmware-iso/**,base-virtualbox/**,base-vmware/**,output-virtualbox-ovf/**,output-vmware-vmx/**&apos;, name: &apos;source&apos;
+  }
+
+parallel  &apos;headless test&apos;: {
+  node {
+    type = &apos;headless&apos;
+    unstash &apos;source&apos;
+    echo &quot;got version ${env.version}&quot;
+    sh &quot;kitchen create $type&quot;
+    retry(3) {
+      sh &quot;kitchen converge $type&quot;
+    }
+    retry(3) {
+      sh &quot;kitchen verify $type&quot;
+    }
+  }
+},  &apos;desktop test&apos;: {
+  node {
+    type = &apos;desktop&apos;
+    unstash &apos;source&apos;
+    sh &quot;kitchen create $type&quot;
+    retry(3) {
+      sh &quot;kitchen converge $type&quot;
+    }
+    retry(3) {
+      sh &quot;kitchen verify $type&quot;
+    }
+  }
+}
+
+parallel &apos;headless build&apos;: {
+  node {
+    type = &apos;headless&apos;
+    unstash &apos;source&apos;
+    sh &quot;./packer/build-${type}-boxes.sh&quot;
+    archive &apos;*${type}*${version}.box&apos;
+  }
+
+}, &apos;desktop build&apos;: {
+  node {
+    type = &apos;desktop&apos;
+    unstash &apos;source&apos;
+    sh &quot;./packer/build-${type}-boxes.sh&quot;
+    archive &apos;*${type}*${version}.box&apos;
+  }
+}</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+</flow-definition>

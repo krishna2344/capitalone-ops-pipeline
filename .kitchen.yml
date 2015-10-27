@@ -2,7 +2,7 @@
 driver:
   name: vagrant
   customize:
-    memory: 768
+    memory: 1024
 
 provisioner:
   name: chef_solo
@@ -13,18 +13,33 @@ provisioner:
     - provision/chef/vendor-cookbooks
 
 platforms:
-  - name: ubuntu-trusty-virtualbox
+  - name: trusty-headless-vbox
     driver:
-      box: tompscanlan/headless
-      box_url: https://atlas.hashicorp.com/tompscanlan/boxes/headless
+      box: izanamee/headless
+      provider: virtualbox
+  - name: trusty-desktop-vbox
+    driver:
+      box: izanamee/desktop
       provider: virtualbox
 
 suites:
   - name: desktop
     run_list:
       - role[izanamee-desktop]
+    customize:
+      memory: 2048
+    includes:
+      - trusty-desktop-vbox
     attributes:
   - name: headless
     run_list:
       - role[izanamee-headless]
     attributes:
+    includes:
+      - trusty-headless-vbox
+  - name: builder
+    run_list:
+      - role[docker-builder]
+    attributes:
+    includes:
+      - trusty-headless-vbox

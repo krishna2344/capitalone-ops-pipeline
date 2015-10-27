@@ -7,7 +7,9 @@ directory node['jenkins-job']['job-dir'] do
   recursive true
 end
 
-node['jenkins-job']['job-files'].each do |project, source_file|
+node.run_state[:jenkins_private_key] = node['jenkins-master']['admin_private_key']
+
+node['jenkins-job']['job-files'].to_a.each do |project, source_file|
   xml_filename = "#{node['jenkins-job']['job-dir']}/#{project}"
 
   cookbook_file xml_filename do
@@ -24,7 +26,7 @@ node['jenkins-job']['job-files'].each do |project, source_file|
   end
 end
 
-node['jenkins-job']['job-templates'].each do |project, source_file|
+node['jenkins-job']['job-templates'].to_a.each do |project, source_file|
   xml_filename = "#{node['jenkins-job']['job-dir']}/#{project}"
 
   template xml_filename do

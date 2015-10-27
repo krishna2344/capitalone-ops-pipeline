@@ -4,28 +4,50 @@
   "json_class": "Chef::Role",
   "description": "The base role for a headless jenkins master",
   "default_attributes": {
+    "gem_installer": {
+      "gems": {
+        "kitchen-vagrant": null,
+        "test-kitchen": null
+      }
+    },
     "packages": [
       "bash",
-      "subversion",
-      "git",
-      "unzip",
+      "build-essential",
       "dos2unix",
-      "python-software-properties"
+      "git",
+      "python-software-properties",
+      "ruby-dev",
+      "rubygems-integration",
+      "subversion",
+      "unzip"
     ],
+    "jenkins-job": {
+      "job-files": {
+        "izanamee": "izanamee_build.xml"
+      }
+    },
     "jenkins-master": {
-      "credentials": {},
+      "credentials": {
+        "tscanlan": {
+          "id": "1e13511b-a440-4850-870d-e06ab4b1e06e",
+         "description": "key to access izanamee git repo",
+         "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA1V9b9oCPaFZT2ZSewx0U/Il7ieTzjtR0jQrArjiNAC08uvkI\neJcIMkmkmzXgPzqlQ9Wa8g3d3GstaA/y2UCw/TKI1F12Q3/pfF4f9O49Fd5563AZ\nUPr5ayB1WBuRcc0kAL1pOtlOHHPLgOyUqdqm4xLXEyi7HaxkjeUqbQJiwrk7Empa\nR/kQydhpdNS1mjsX2yeFsHugKvuY2EyzcCo7UQo2t4+gPv+BFp5CNY2RL6jqmp0M\nzKGJrnW3C7v1nVBKeGFAQzdOvs/X4R+tuFJ+FgK7b6jcZeo0CfiHGbBvO8MF7ZRj\nNk75yCQdqdCeYfWMlrOgvzPHOnRKbsDU+eGiNwIDAQABAoIBAQCfeTQsmo2Ud+EX\nn+LBBX1n+gFhYMNAnz21JLI6BH4uAaGARRy1tHwlybDDaJL/7v8SIhY6j26gjWJU\ngocJJTajJx/pSSlY7cM+dsL/twfkznDlLNVfFxVPoeTSQ1iDa8Va4DZEC6I71bfl\n1eyOvqM42B3zbd/cH7rP6tW4v628xoLrEND5StQRf0vgYcGi8KmW0eTmz3GpGvt8\nsSJeVyZfxE/UKuotRekOAFJDRBwXlBNclDLDIZ7ti9JVVqLUKGDP8J+BOJa/hrv7\n1dlbXEUKIUVK23tGTSBbCYI0gDSwU5FkZGj5Bp0pYWBdp7QDxTkLAiLEnT01ytUV\n2Mr3/dihAoGBAPKa4v6B3We7Tf0qPVJtueE0z4OLpcfmevQtA/UI8bnsIDUe6kU+\ngn56McjseDC+9i4JA7pFne1p1nyPmVjb+8I97Fq9cE8Mn+oFlubLlel6myOlmmAE\nWgqbGgkZOuA4eKeXw6o3zyR2kqN8HdUkdkIb/fTDJRgN4X2ti3VflKiJAoGBAOEn\nSKmK0hjGW1t0HKPMzBLktT+9GYjoK1204xWlKqmEjRqLbf7b/JMfKQ/pqxB/qm6h\nDOxtgdlLxI5c2vUWe6bn3IStkhuSt2vPoSA6MakSUyPIgWn24SryqLIL3HCE6iGA\nAQHtKQg2o5U27YhcwVEwV5ZP3jco74WutSent8S/AoGAGEET4I3rLKu1KFJIvyzp\nIHK/LE+Ry2JneHHnq1+xivzoW2cz1KhjM3HT+FprybPNuNx92umK2Gl0YA+bLR8R\nFGJMduXpjH2eny7f30MLQcRYLkAoJuFIfzbya2ZyVGhQ57Bsh1/8/ZA9KMsH0H9M\ns19JDGdWFgmNOZtYDev4WMECgYEA2i+sbYf2Y0XNgEl7+4vZ8zEpJ3RDy3VZmPxS\n10Xwmse1yZR2anSaRaP7scz6FgnxijWNhYv1OjL/bgozsTAxcaPdAcIGBaxfDR3v\nAYEDYNk+Mj36k0pIF8uBiNCPtYZIMWCPGWPO0IPKcC4Db5KbT+ct6Z7KM9/6hSyx\nppUUM5cCgYAO9WSCxpVkqsFHwj9ppmcLWoTbwZuq8fd8GcdxW/dejqHqIa20qIYv\nQ7XKnOgpRt6KeSPDtcCJcJyySOmzgdPXSsz8556QR5EZaSXz2dI6jxHulRNzJ04K\nxDow502ywkbESHE0XrhmaA3yKFRU1KAymJAULzFzztYEgquMvxBS1w==\n-----END RSA PRIVATE KEY-----"
+       }
+      },
       "users": {},
+      "admin_username": "admin",
       "admin_password": "password",
-      "admin_email": "tompscanlan@gmail.com",
-      "admin_private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpQIBAAKCAQEA6/F7TFZeRSot6HGFm79Fj1M3LWjui73jwCgQroYysF+rnLL0\nVfPlx4lJ9hLRNcRBNvSWfBkE+VfWvNZBIBfiTILEKwH0qoY3KfPOrXYrHT5g7PXy\nzO337qmGgY84h0x9yByFOWLeR1PKvKAupPiUZk7I6RA1+h4Y65wolMZ+Y7kTRQ1g\npghosFSb81WHED+5IQegVmjaPR1KdUTTzgtiroF6O6UUb1hPjMLO6tmnlmTCIOzh\nta2/mu01Gm1DEuScDmTxrt0QJjmYGCZYhTvRg3mYa5rbMaWlAES4xhbHW412rY+q\nUoKqvt4/CLEXNwfjOgw/J2YuJw0w6pEQGmt43QIDAQABAoIBAQCktQCzu583fUhq\n+cShgxbWBOuB4byVBMxWuiFbFAeSpFaynyJ+VjLT5n0hMOWnOQeli3z5yKV2QuF/\nFbqE4udxLeAvfcAEwokD2lUvNkzGr2MOSGtkr8LicqmZDBgUK0urRG2kL+anuFDQ\n+KlXNMiz2s/aExz7K8ONxod1xFM63QL0UjFq/n3p9+K5gYJ9IkwKqTwnQyNP8+9d\ngzXeDGilaDK44kKWTYwri12hXFc8L2GFS35ytgG/a3FlijnbdwVvpeLsmPky83Y9\nEhr169Bmkq1HZvN8StjU9s4Ul0JI2HmnkXguSC4jIh0hnd97cOQ+s13FgseyhS1a\n3uqrAd4pAoGBAPidj1iOQlUBuPuVbkqxpo48vUUa5Ef3tiTPOyXP3Fv/hzTQIhLv\nR7J2zYH0YTukwjw5ShOjqYt/rGW0MxhRnCkdfEY+giOQXsAcAFoP6lrwxIIAvk+8\nE/QKSSqgqvSWraIn+Ib8azx6VIhnEFt/0ngpndj9nv46QF/m7iqsUH3PAoGBAPLz\nkGXec988vO2AF1u2byBpUFP0lJgSwWiKtJ5OkaaYrg7YaIqfonpR0qVbwztcFSgh\nJ0FCxjCyQuX6T+Gk7j4PAYWzAshwIvnTB6HFqsdfLUKWwJhg0ZNqwRYW+hqjgkp0\nfrs21/C9PtTLFfpYhHECT1/QFpf2fJ7gifyvmtWTAoGAIHzWYogUeu9CsP2R8AjO\n7v9Y7FLbSdxA3QaHgCVtckgt7uTTzw2dnOCRck3w9s5M43nJCE/2s9f3O0MU+jSP\n53+G4dcBQox3FTuTgDFcOo4D38khFWJKaTV+4ickr9mQzwPSIjGSAdEqgriVFp/Z\nbQJjMhvSTv5lsyKGNOVXj1kCgYEAnsoWbJ5SOWvnR4tauPSp+RMcD2Nh42sOwhc2\nKenMRIix6r4CxefEOBJWjQFGvvtWUJ4qm/rasmUwWEOcBizYEfOY2RvBC+RO193X\ntSIOlrRcTpNdWbqd/63ceWWXHeYUeDlfw1j7Fjt6X3ZE7RUBqyMJYeQNgFD37pdv\nWJolpsUCgYEAiyrFVz25KoosuCCp2NwAJHhnrLsXHKGJ1q0IOLl5PXtQzzdKBuHD\n+9VCU+R0N5Lk58Lus5CFUGOSz6bXGibdBGppOQxbqZaHVkuGgeKMoc9Tl08pyOyh\nL+NCTy5zU2FOuV28rWV+hreanb878ApD4174jkzd2sNZjuF7LNlG8TM=\n-----END RSA PRIVATE KEY-----",
-      "admin_public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDr8XtMVl5FKi3ocYWbv0WPUzctaO6LvePAKBCuhjKwX6ucsvRV8+XHiUn2EtE1xEE29JZ8GQT5V9a81kEgF+JMgsQrAfSqhjcp886tdisdPmDs9fLM7ffuqYaBjziHTH3IHIU5Yt5HU8q8oC6k+JRmTsjpEDX6HhjrnCiUxn5juRNFDWCmCGiwVJvzVYcQP7khB6BWaNo9HUp1RNPOC2KugXo7pRRvWE+Mws7q2aeWZMIg7OG1rb+a7TUabUMS5JwOZPGu3RAmOZgYJliFO9GDeZhrmtsxpaUARLjGFsdbjXatj6pSgqq+3j8IsRc3B+M6DD8nZi4nDTDqkRAaa3jd vagrant@packer-vmware-iso-2015-10-03T02:51:52+0000",
-      "plugins": [
+      "admin_email": "tscanlan@vmware.com",
+      "admin_private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA1V9b9oCPaFZT2ZSewx0U/Il7ieTzjtR0jQrArjiNAC08uvkI\neJcIMkmkmzXgPzqlQ9Wa8g3d3GstaA/y2UCw/TKI1F12Q3/pfF4f9O49Fd5563AZ\nUPr5ayB1WBuRcc0kAL1pOtlOHHPLgOyUqdqm4xLXEyi7HaxkjeUqbQJiwrk7Empa\nR/kQydhpdNS1mjsX2yeFsHugKvuY2EyzcCo7UQo2t4+gPv+BFp5CNY2RL6jqmp0M\nzKGJrnW3C7v1nVBKeGFAQzdOvs/X4R+tuFJ+FgK7b6jcZeo0CfiHGbBvO8MF7ZRj\nNk75yCQdqdCeYfWMlrOgvzPHOnRKbsDU+eGiNwIDAQABAoIBAQCfeTQsmo2Ud+EX\nn+LBBX1n+gFhYMNAnz21JLI6BH4uAaGARRy1tHwlybDDaJL/7v8SIhY6j26gjWJU\ngocJJTajJx/pSSlY7cM+dsL/twfkznDlLNVfFxVPoeTSQ1iDa8Va4DZEC6I71bfl\n1eyOvqM42B3zbd/cH7rP6tW4v628xoLrEND5StQRf0vgYcGi8KmW0eTmz3GpGvt8\nsSJeVyZfxE/UKuotRekOAFJDRBwXlBNclDLDIZ7ti9JVVqLUKGDP8J+BOJa/hrv7\n1dlbXEUKIUVK23tGTSBbCYI0gDSwU5FkZGj5Bp0pYWBdp7QDxTkLAiLEnT01ytUV\n2Mr3/dihAoGBAPKa4v6B3We7Tf0qPVJtueE0z4OLpcfmevQtA/UI8bnsIDUe6kU+\ngn56McjseDC+9i4JA7pFne1p1nyPmVjb+8I97Fq9cE8Mn+oFlubLlel6myOlmmAE\nWgqbGgkZOuA4eKeXw6o3zyR2kqN8HdUkdkIb/fTDJRgN4X2ti3VflKiJAoGBAOEn\nSKmK0hjGW1t0HKPMzBLktT+9GYjoK1204xWlKqmEjRqLbf7b/JMfKQ/pqxB/qm6h\nDOxtgdlLxI5c2vUWe6bn3IStkhuSt2vPoSA6MakSUyPIgWn24SryqLIL3HCE6iGA\nAQHtKQg2o5U27YhcwVEwV5ZP3jco74WutSent8S/AoGAGEET4I3rLKu1KFJIvyzp\nIHK/LE+Ry2JneHHnq1+xivzoW2cz1KhjM3HT+FprybPNuNx92umK2Gl0YA+bLR8R\nFGJMduXpjH2eny7f30MLQcRYLkAoJuFIfzbya2ZyVGhQ57Bsh1/8/ZA9KMsH0H9M\ns19JDGdWFgmNOZtYDev4WMECgYEA2i+sbYf2Y0XNgEl7+4vZ8zEpJ3RDy3VZmPxS\n10Xwmse1yZR2anSaRaP7scz6FgnxijWNhYv1OjL/bgozsTAxcaPdAcIGBaxfDR3v\nAYEDYNk+Mj36k0pIF8uBiNCPtYZIMWCPGWPO0IPKcC4Db5KbT+ct6Z7KM9/6hSyx\nppUUM5cCgYAO9WSCxpVkqsFHwj9ppmcLWoTbwZuq8fd8GcdxW/dejqHqIa20qIYv\nQ7XKnOgpRt6KeSPDtcCJcJyySOmzgdPXSsz8556QR5EZaSXz2dI6jxHulRNzJ04K\nxDow502ywkbESHE0XrhmaA3yKFRU1KAymJAULzFzztYEgquMvxBS1w==\n-----END RSA PRIVATE KEY-----",
+      "admin_public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVX1v2gI9oVlPZlJ7DHRT8iXuJ5POO1HSNCsCuOI0ALTy6+Qh4lwgySaSbNeA/OqVD1ZryDd3cay1oD/LZQLD9MojUXXZDf+l8Xh/07j0V3nnrcBlQ+vlrIHVYG5FxzSQAvWk62U4cc8uA7JSp2qbjEtcTKLsdrGSN5SptAmLCuTsSalpH+RDJ2Gl01LWaOxfbJ4Wwe6Aq+5jYTLNwKjtRCja3j6A+/4EWnkI1jZEvqOqanQzMoYmudbcLu/WdUEp4YUBDN06+z9fhH624Un4WArtvqNxl6jQJ+IcZsG87wwXtlGM2TvnIJB2p0J5h9YyWs6C/M8c6dEpuwNT54aI3 jenkins@packer-vmware-iso",
+        "plugins": [
         "ansicolor",
         "build-user-vars-plugin",
         "build-pipeline-plugin",
         "checkstyle",
         "conditional-buildstep",
         "credentials",
+        "docker-workflow",
         "envinject",
         "ghprb",
         "git",
