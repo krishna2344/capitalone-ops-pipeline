@@ -52,6 +52,7 @@
   "run_list": [
     "recipe[apt::default]",
     "recipe[packages]",
+    "recipe[gem_installer]",
     "recipe[java_install]",
     "recipe[user::data_bag]",
     "recipe[maven]",

@@ -30,6 +30,11 @@ Vagrant.configure(2) do |config|
   config.berkshelf.enabled = true
   config.vm.provision "chef_solo" do |chef|
     chef.json = {
+       'jenkins-job' => {
+          'job-templates' => {
+          'test_sonar' => 'test_sonar.xml.erb'
+        }
+      },
       "vmware_workstation" => {
         "serial_number" => "this-should-be-a-valid-serial-number"
       }
@@ -39,5 +44,4 @@ Vagrant.configure(2) do |config|
     chef.add_role 'jenkins-master'
     chef.add_role 'izanamee-headless'
   end
-
 end
