@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1.10.1">
+<actions/>
+<description/>
+<keepDependencies>false</keepDependencies>
+<properties/>
+<definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.10.1">
+<script>
+stage 'test'
+
+docker.image('maven:3.3.3-jdk-8').inside {
+  git 'https://github.com/SonarSource/sonar-examples.git'
+
+  def sonar_host = '<%= node['ipaddress'] %>'
+
+  def sonar_prop = '/var/lib/jenkins/jobs/test_sonar/workspace/sonar-runner-2.4/conf/sonar-runner.properties'
+  def project_prop = 'sonar-project.properties'
+
+  sh 'wget -q http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip'
+  sh 'unzip -o sonar-runner-dist-2.4.zip'
+  sh "mkdir -p `dirname ${sonar_prop}`"
+  sh "echo 'sonar.host.url=http://${sonar_host}:9000' > ${sonar_prop}"
+  sh "echo 'sonar.jdbc.url=jdbc:h2:tcp://${sonar_host}:9092/sonar' >> ${sonar_prop}"
+
+  dir('sonar-examples/projects/languages/java/sonar-runner/java-sonar-runner-simple/') {
+
+    sh "echo 'sonar.projectKey=my:project' > ${project_prop}"
+    sh "echo 'sonar.projectName=My project' >> ${project_prop}"
+    sh "echo 'sonar.projectVersion=1.0' >> ${project_prop}"
+    sh "echo 'sonar.sources=.' >> ${project_prop}"
+
+    sh './sonar-runner-2.4/bin/sonar-runner'
+  }
+}</script>
+<sandbox>false</sandbox>
+</definition>
+<triggers/>
+</flow-definition>
