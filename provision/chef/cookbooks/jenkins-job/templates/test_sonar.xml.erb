@@ -6,12 +6,13 @@
 <properties/>
 <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.10.1">
 <script>
+def sonar_host = '172.17.42.1'
+
+println "using ip "+ sonar_host
 stage 'test'
 
 docker.image('maven:3.3.3-jdk-8').inside {
   git 'https://github.com/SonarSource/sonar-examples.git'
-
-  def sonar_host = '<%= node['ipaddress'] %>'
 
   def sonar_prop = '/var/lib/jenkins/jobs/test_sonar/workspace/sonar-runner-2.4/conf/sonar-runner.properties'
   def project_prop = 'sonar-project.properties'
@@ -31,7 +32,8 @@ docker.image('maven:3.3.3-jdk-8').inside {
 
     sh './sonar-runner-2.4/bin/sonar-runner'
   }
-}</script>
+}
+</script>
 <sandbox>false</sandbox>
 </definition>
 <triggers/>
