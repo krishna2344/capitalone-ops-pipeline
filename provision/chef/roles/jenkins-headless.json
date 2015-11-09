@@ -2,7 +2,7 @@
   "name": "jenkins-master",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "The base role for a jenkins master",
+  "description": "The base role for a headless jenkins master",
   "default_attributes": {
     "packages": [
       "bash",
@@ -12,17 +12,17 @@
       "dos2unix",
       "python-software-properties"
     ],
-    "jenkins-master":{
+    "jenkins-master": {
       "credentials": {},
       "users": {},
       "admin_password": "password",
       "admin_email": "tompscanlan@gmail.com",
       "admin_private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpQIBAAKCAQEA6/F7TFZeRSot6HGFm79Fj1M3LWjui73jwCgQroYysF+rnLL0\nVfPlx4lJ9hLRNcRBNvSWfBkE+VfWvNZBIBfiTILEKwH0qoY3KfPOrXYrHT5g7PXy\nzO337qmGgY84h0x9yByFOWLeR1PKvKAupPiUZk7I6RA1+h4Y65wolMZ+Y7kTRQ1g\npghosFSb81WHED+5IQegVmjaPR1KdUTTzgtiroF6O6UUb1hPjMLO6tmnlmTCIOzh\nta2/mu01Gm1DEuScDmTxrt0QJjmYGCZYhTvRg3mYa5rbMaWlAES4xhbHW412rY+q\nUoKqvt4/CLEXNwfjOgw/J2YuJw0w6pEQGmt43QIDAQABAoIBAQCktQCzu583fUhq\n+cShgxbWBOuB4byVBMxWuiFbFAeSpFaynyJ+VjLT5n0hMOWnOQeli3z5yKV2QuF/\nFbqE4udxLeAvfcAEwokD2lUvNkzGr2MOSGtkr8LicqmZDBgUK0urRG2kL+anuFDQ\n+KlXNMiz2s/aExz7K8ONxod1xFM63QL0UjFq/n3p9+K5gYJ9IkwKqTwnQyNP8+9d\ngzXeDGilaDK44kKWTYwri12hXFc8L2GFS35ytgG/a3FlijnbdwVvpeLsmPky83Y9\nEhr169Bmkq1HZvN8StjU9s4Ul0JI2HmnkXguSC4jIh0hnd97cOQ+s13FgseyhS1a\n3uqrAd4pAoGBAPidj1iOQlUBuPuVbkqxpo48vUUa5Ef3tiTPOyXP3Fv/hzTQIhLv\nR7J2zYH0YTukwjw5ShOjqYt/rGW0MxhRnCkdfEY+giOQXsAcAFoP6lrwxIIAvk+8\nE/QKSSqgqvSWraIn+Ib8azx6VIhnEFt/0ngpndj9nv46QF/m7iqsUH3PAoGBAPLz\nkGXec988vO2AF1u2byBpUFP0lJgSwWiKtJ5OkaaYrg7YaIqfonpR0qVbwztcFSgh\nJ0FCxjCyQuX6T+Gk7j4PAYWzAshwIvnTB6HFqsdfLUKWwJhg0ZNqwRYW+hqjgkp0\nfrs21/C9PtTLFfpYhHECT1/QFpf2fJ7gifyvmtWTAoGAIHzWYogUeu9CsP2R8AjO\n7v9Y7FLbSdxA3QaHgCVtckgt7uTTzw2dnOCRck3w9s5M43nJCE/2s9f3O0MU+jSP\n53+G4dcBQox3FTuTgDFcOo4D38khFWJKaTV+4ickr9mQzwPSIjGSAdEqgriVFp/Z\nbQJjMhvSTv5lsyKGNOVXj1kCgYEAnsoWbJ5SOWvnR4tauPSp+RMcD2Nh42sOwhc2\nKenMRIix6r4CxefEOBJWjQFGvvtWUJ4qm/rasmUwWEOcBizYEfOY2RvBC+RO193X\ntSIOlrRcTpNdWbqd/63ceWWXHeYUeDlfw1j7Fjt6X3ZE7RUBqyMJYeQNgFD37pdv\nWJolpsUCgYEAiyrFVz25KoosuCCp2NwAJHhnrLsXHKGJ1q0IOLl5PXtQzzdKBuHD\n+9VCU+R0N5Lk58Lus5CFUGOSz6bXGibdBGppOQxbqZaHVkuGgeKMoc9Tl08pyOyh\nL+NCTy5zU2FOuV28rWV+hreanb878ApD4174jkzd2sNZjuF7LNlG8TM=\n-----END RSA PRIVATE KEY-----",
       "admin_public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDr8XtMVl5FKi3ocYWbv0WPUzctaO6LvePAKBCuhjKwX6ucsvRV8+XHiUn2EtE1xEE29JZ8GQT5V9a81kEgF+JMgsQrAfSqhjcp886tdisdPmDs9fLM7ffuqYaBjziHTH3IHIU5Yt5HU8q8oC6k+JRmTsjpEDX6HhjrnCiUxn5juRNFDWCmCGiwVJvzVYcQP7khB6BWaNo9HUp1RNPOC2KugXo7pRRvWE+Mws7q2aeWZMIg7OG1rb+a7TUabUMS5JwOZPGu3RAmOZgYJliFO9GDeZhrmtsxpaUARLjGFsdbjXatj6pSgqq+3j8IsRc3B+M6DD8nZi4nDTDqkRAaa3jd vagrant@packer-vmware-iso-2015-10-03T02:51:52+0000",
-      "admin_email": "tscanlan@vmware.com",
       "plugins": [
         "ansicolor",
         "build-user-vars-plugin",
+        "build-pipeline-plugin",
         "checkstyle",
         "conditional-buildstep",
         "credentials",
@@ -43,28 +43,30 @@
         "promoted-builds",
         "run-condition",
         "scm-api",
+        "sonar",
+        "sonargraph-plugin",
         "ssh-credentials",
         "versionnumber",
-        "violations"
-       ]
+        "violations",
+        "workflow-aggregator",
+        "workflow-api",
+        "workflow-basic-steps",
+        "workflow-cps",
+        "workflow-cps-global-lib",
+        "workflow-durable-task-step",
+        "workflow-job",
+        "workflow-scm-step",
+        "workflow-step-api",
+        "workflow-support"
+      ]
     },
     "jenkins": {
       "java": "/usr/lib/jvm/java-7-oracle/bin/java",
-       "master": {
-         "install_method": "package"
-       }
-    },
-    "packer": {
-      "version": "packer_0.8.6",
-      "raw_checksums": "1fb3b1382885f39c1f1f159fc7a6ef4be12d074c97fba76e0050d1990a990aed  packer_0.8.6_darwin_386.zip\n91b5e5d4524a7a2f09a07aad1c8e26e1200b47191a42c1b2facac4a27fd674d0  packer_0.8.6_darwin_amd64.zip\nc1eee9159a2b808a98392026b18b9b8d273dc7315729be223b872f244ee4a8a2  packer_0.8.6_freebsd_386.zip\nbd0dac59e22a490068f45e4d97a8e698637efca88c89caa7df764ea96bd7b718  packer_0.8.6_freebsd_amd64.zip\n4ca3827f70af25656dd3eff6ac442b0e62adc28d6ea1d56f47721189bb7d0453  packer_0.8.6_freebsd_arm.zip\nd1385af26ea42560ddc4f4958c88cb00c3e4a9f8a2d88a81c96b4bf1cb60369b  packer_0.8.6_linux_386.zip\n2f1ca794e51de831ace30792ab0886aca516bf6b407f6027e816ba7ca79703b5  packer_0.8.6_linux_amd64.zip\n958cbae3f99990946c1de9af238bf1760c3382f83c4975a32be54cfb0378d8d8  packer_0.8.6_linux_arm.zip\n009f30cf9f137429ca4dc2c175e0431a72f44ba3dd427cb8a173c68c7d3be7eb  packer_0.8.6_openbsd_386.zip\nbfab2f16a6b4f34e317d792ad97c3e879304dc8ae7866e70737f61ebfc8952a0  packer_0.8.6_openbsd_amd64.zip\n8d0bd037909206926d988b30e9336faf105dffe97c2924d455b28de437557c7f  packer_0.8.6_windows_386.zip\n786503f2ffe658c1b318af227eabb8c10f3f425608ad4ef709206757931b7eee  packer_0.8.6_windows_amd64.zip"
-    },
-    "ngrok": {
-      "webserver": {
-        "proto": {
-          "http+https": "8080"
-        }
+      "master": {
+        "install_method": "package"
       }
     },
+
     "java": {
       "install_flavor": "oracle",
       "jdk_version": "7",
@@ -72,20 +74,12 @@
       "oracle": {
         "accept_oracle_download_terms": "true"
       }
-    },
-    "vmware_workstation": {
-      "source_prefix": "https://download3.vmware.com/software/wkst/file/",
-      "install_file": "VMware-Workstation-Full-12.0.0-2985596.x86_64.bundle",
-      "checksum": "a0510c385008ce4441bb572ba51fcd7573b01f439e443320b1a6b2668b426cbb",
-      "serial_number": "also needs to be set"
     }
   },
   "run_list": [
-    "role[izanamee-desktop]",
-    "recipe[packer]",
-    "recipe[virtualbox]",
-    "recipe[vmware_workstation]",
+    "role[izanamee-headless]",
     "recipe[packer-boss-jenkins]",
+    "recipe[sonarqube]",
     "recipe[jenkins-job]"
   ]
 }

@@ -1,0 +1,6 @@
+default['jenkins-master']['build-xml'] = 'izanamee-build.xml'
+default['jenkins-master']['admin_private_key'] = 'you should set this'
+default['jenkins-master']['admin_public_key'] = 'you should set this'
+default['jenkins-master']['admin_username'] = 'admin'
+default['jenkins-master']['admin_password'] = 'password'
+default['jenkins-master']['admin_email'] = 'admin@example.com'
