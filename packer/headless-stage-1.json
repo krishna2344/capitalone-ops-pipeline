@@ -92,7 +92,7 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/root_setup.sh"
+        "packer/scripts/base_setup_ubuntu.sh"
       ]
     }
   ]

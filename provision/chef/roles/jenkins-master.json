@@ -108,7 +108,6 @@
     }
   },
   "run_list": [
-    "role[izanamee-desktop]",
     "recipe[packer]",
     "recipe[chef-dk]",
     "recipe[vagrant]",

@@ -16,7 +16,7 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/ubuntu_docker_base.sh"
+        "packer/scripts/base_docker_setup_ubuntu.sh"
       ]
     },
     {

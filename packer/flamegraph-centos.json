@@ -1,0 +1,113 @@
+{
+  "variables": {
+    "atlas_token": "{{env `ATLAS_TOKEN`}}",
+    "box_name": "izanamee/flamegraph-centos",
+    "iso_url": "http://mirror.umd.edu/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso",
+    "iso_checksum": "9381a24b8bee2fed0c26896141a64b69",
+    "iso_checksum_type": "md5",
+    "version": "0.1",
+    "memory": "512",
+    "cpu": "1",
+    "headless": "false",
+    "disk_size": "20000"
+  },
+  "builders": [
+    {
+      "name": "centos-virtualbox",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "guest_os_type": "RedHat_64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "output_directory": "img_centos_6_virtualbox",
+      "ssh_port": 22,
+      "ssh_pty": true,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
+      "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `memory`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{user `cpu`}}"
+        ]
+      ]
+    },
+    {
+      "name": "centos-vmware",
+      "type": "vmware-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "output_directory": "img_centos_vmware",
+      "guest_os_type": "centos-64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_pty": true,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
+      "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpu`}}",
+        "mks.3denable": false
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "packer/scripts/base_setup_centos.sh",
+        "packer/scripts/vagrant.sh",
+        "packer/scripts/host_tools.sh",
+        "packer/scripts/clean_centos.sh"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "provision/chef/cookbooks",
+        "provision/chef/vendor-cookbooks"
+      ],
+      "data_bags_path": "provision/chef/data_bags",
+      "roles_path": "provision/chef/roles",
+      "run_list": [
+        "role[flamegraph-centos]"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "jumpbox-{{.BuildName}}-{{user `version`}}.box",
+      "compression_level": 9,
+      "keep_input_artifact": true
+    }
+  ]
+}

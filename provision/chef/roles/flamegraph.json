@@ -1,0 +1,9 @@
+{
+  "name": "flamegraph",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "This role applies flamegraph",
+  "run_list": [
+    "recipe[flamegraph]"
+  ]
+}

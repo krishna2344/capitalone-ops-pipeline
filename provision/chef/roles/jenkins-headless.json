@@ -10,17 +10,6 @@
         "test-kitchen": null
       }
     },
-    "packages": [
-      "bash",
-      "build-essential",
-      "dos2unix",
-      "git",
-      "python-software-properties",
-      "ruby-dev",
-      "rubygems-integration",
-      "subversion",
-      "unzip"
-    ],
     "jenkins-job": {
       "job-files": {
         "izanamee": "izanamee_build.xml"
@@ -87,7 +76,6 @@
     }
   },
   "run_list": [
-    "role[izanamee-headless]",
     "recipe[packer-boss-jenkins]",
     "recipe[sonarqube]",
     "recipe[jenkins-job]"

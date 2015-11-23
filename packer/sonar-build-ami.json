@@ -31,7 +31,7 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/ami_setup.sh"
+        "packer/scripts/ami_setup_ubuntu.sh"
       ]
     },
     {

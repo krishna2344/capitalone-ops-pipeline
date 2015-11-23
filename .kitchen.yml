@@ -1,6 +1,9 @@
 ---
 driver:
   name: vagrant
+  provider: vmware_fusion
+  ssh:
+    pty: true
   customize:
     memory: 1024
 
@@ -13,37 +16,78 @@ provisioner:
     - provision/chef/vendor-cookbooks
 
 platforms:
-  - name: trusty-headless-vbox
+  - name: centos
+    driver:
+      box: izanamee/centos-headless
+      customize:
+        memory: 256
+    run_list:
+      - role[izanamee-headless-centos]
+  - name: ubuntu
     driver:
       box: izanamee/headless
-      provider: virtualbox
-  - name: trusty-desktop-vbox
-    driver:
-      box: izanamee/desktop
-      provider: virtualbox
-
-suites:
-  - name: desktop
-    run_list:
-      - role[izanamee-desktop]
-    customize:
-      memory: 2048
-    includes:
-      - trusty-desktop-vbox
-    attributes:
-  - name: headless
+      customize:
+        memory: 256
     run_list:
       - role[izanamee-headless]
-    attributes:
+  - name: ubuntu-desktop
+    driver:
+      box: izanamee/desktop
+    run_list:
+      - role[izanamee-desktop]
+
+suites:
+  - name: packer-builder
     includes:
-      - trusty-headless-vbox
+      - ubuntu-desktop
+    run_list:
+      - role[jenkins-master]
+    customize:
+      memory: 2048
+
+  - name: jenkins
+    includes:
+      - centos
+      - ubuntu
+    run_list:
+      - role[jenkins-headless]
+    customize:
+      memory: 2048
+
   - name: builder
     run_list:
       - role[docker-builder]
     attributes:
     includes:
       - trusty-headless-vbox
+#  - name: centos-desktop
+#    driver:
+#      box: izanamee/centos-headless
+#    run_list:
+#      - role[izanamee-desktop-centos]
+
+  - name: flamegraph
+    includes:
+      - centos
+      - ubuntu
+      - ubuntu-desktop
+    run_list:
+      - role[flamegraph]
+
+  - name: headless
+    includes:
+      - centos
+      - ubuntu
+
+  - name: desktop
+    includes:
+      - ubuntu-desktop
+
   - name: sonar
+    includes:
+      - centos
+      - ubuntu
+      - ubuntu-desktop
     run_list:
       - role[jenkins-headless]
     attributes:

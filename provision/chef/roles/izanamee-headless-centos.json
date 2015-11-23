@@ -1,8 +1,8 @@
 {
-  "name": "izanamee-headless",
+  "name": "izanamee-headless-centos",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "The base role for a headless izanamee",
+  "description": "The base role for a headless izanamee, based on CentOS",
   "default_attributes": {
     "apt": {
       "compile_time_update": true
@@ -14,15 +14,10 @@
     "packages": [
       "bash",
       "ksh",
-      "subversion",
       "git",
-      "libsvn-java",
       "unzip",
       "libtool",
-      "dos2unix",
-      "python-software-properties",
-      "autotools-dev",
-      "libltdl-dev"
+      "dos2unix"
     ],
     "gradle": {
       "version": "1.12",
@@ -59,7 +54,6 @@
   "run_list": [
     "recipe[apt::default]",
     "recipe[packages]",
-    "recipe[gem_installer]",
     "recipe[java_install]",
     "recipe[user::data_bag]",
     "recipe[maven]",
