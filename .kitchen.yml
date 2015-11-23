@@ -1,8 +1,14 @@
 ---
 driver:
   name: vagrant
+#  provider: vmware_fusion
+  provider: virtualbox
+  ssh:
+    pty: true
   customize:
     memory: 1024
+    natdnshostresolver1: 'on'
+    natdnsproxy1: 'on'
 
 provisioner:
   name: chef_solo
@@ -13,40 +19,54 @@ provisioner:
     - provision/chef/vendor-cookbooks
 
 platforms:
-  - name: trusty-headless-vbox
+  - name: centos
     driver:
-      box: izanamee/headless
-      provider: virtualbox
-  - name: trusty-desktop-vbox
-    driver:
-      box: izanamee/desktop
-      provider: virtualbox
-
-suites:
-  - name: desktop
-    run_list:
-      - role[izanamee-desktop]
-    customize:
-      memory: 2048
-    includes:
-      - trusty-desktop-vbox
-    attributes:
-  - name: headless
+      box: tompscanlan/headless-centos
     run_list:
       - role[izanamee-headless]
-    attributes:
-    includes:
-      - trusty-headless-vbox
-  - name: builder
+  - name: ubuntu
+    driver:
+      box: tompscanlan/headless-ubuntu
     run_list:
-      - role[docker-builder]
-    attributes:
+      - role[izanamee-headless]
+
+suites:
+  - name: mysql
     includes:
-      - trusty-headless-vbox
-  - name: sonar
+      - centos
+      - ubuntu
     run_list:
-      - role[jenkins-headless]
+      - role[mysql_wrap]
+
+  - name: jenkins
+    includes:
+      - centos
+      - ubuntu
+    run_list:
+      - role[jenkinsonar]
     attributes:
       jenkins-job:
         job-templates:
           test_sonar: test_sonar.xml.erb
+
+  - name: flamegraph
+    includes:
+      - ubuntu
+      - centos
+    run_list:
+      - role[flamegraph]
+
+  - name: headless
+    includes:
+      - ubuntu
+      - docker
+      - centos
+    run_list:
+      - role[izanamee-headless]
+
+  - name: desktop
+    includes:
+      - ubuntu
+      - docker
+    run_list:
+      - role[izanamee-desktop]

@@ -8,7 +8,10 @@
 <script>
 stage 'test'
 
-docker.image('maven:3.3.3-jdk-8').inside {
+// example of running the same job in a container
+// instead of on a physical node
+// docker.image('maven:3.3.3-jdk-8').inside {
+node {
   git 'https://github.com/SonarSource/sonar-examples.git'
 
   sh 'wget -q http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip'

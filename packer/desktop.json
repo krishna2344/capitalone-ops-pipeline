@@ -90,7 +90,7 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/root_setup.sh"
+        "packer/scripts/base_setup_ubuntu.sh"
       ]
     },
     {
@@ -108,7 +108,7 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/ubuntu_shrink.sh"
+        "packer/scripts/shrink_ubuntu.sh"
       ]
     }
   ],
@@ -156,12 +156,8 @@
       "Vagrantfile",
       "*.box",
       "packer_cache/*",
-      "output-vmware-iso/*",
-      "output-virtualbox-iso/*",
-      "base-vmware",
-      "base-virtualbox",
-      "output-vmware-vmx",
-      "output-virtualbox-ovf",
+      "output-*/*",
+      "base-*/*",
       "jenkins",
       ".kitchen/*",
       ".vagrant/*"

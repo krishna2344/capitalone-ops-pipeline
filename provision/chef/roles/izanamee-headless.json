@@ -5,24 +5,12 @@
   "description": "The base role for a headless izanamee",
   "default_attributes": {
     "apt": {
-      "compile_time_update": true
+      "compiletime": true,
+      "periodic_update_min_delay": 300
     },
     "tz": "US/Eastern",
     "users": [
       "vagrant"
-    ],
-    "packages": [
-      "bash",
-      "ksh",
-      "subversion",
-      "git",
-      "libsvn-java",
-      "unzip",
-      "libtool",
-      "dos2unix",
-      "python-software-properties",
-      "autotools-dev",
-      "libltdl-dev"
     ],
     "gradle": {
       "version": "1.12",
@@ -39,20 +27,34 @@
         "checksum": "3a8dc4a12ab9f3607a1a2097bbab0150c947ad6719d8f1bb6d5b47d0fb0c4779"
       }
     },
+    "java_install": {
+      "java8": true,
+      "java7": true
+    },
     "java": {
+      "jdk_version": 8,
+      "java_home": "/usr/lib/jvm/java",
       "install_flavor": "oracle",
-      "jdk_version": "7",
-      "set_default": false,
-      "set_etc_environment": false,
+      "reset_alternatives": true,
+      "set_default": true,
+      "set_etc_environment": true,
+      "use_alt_suffix": true,
       "oracle": {
-        "accept_oracle_download_terms": "true"
+        "accept_oracle_download_terms": true
+      }
+    },
+    "firewall": {
+      "allow_ssh": true
+    },
+    "udev": {
+      "net": {
+        "eth0": "",
+        "eth1": ""
       }
     }
   },
   "run_list": [
-    "recipe[apt::default]",
-    "recipe[packages]",
-    "recipe[gem_installer]",
+    "recipe[apt]",
     "recipe[java_install]",
     "recipe[user::data_bag]",
     "recipe[maven]",
@@ -60,6 +62,8 @@
     "recipe[nodejs]",
     "recipe[gradle]",
     "recipe[timezone_lwrp]",
-    "recipe[configure_headless]"
+    "recipe[firewall::default]",
+    "recipe[configure_headless]",
+    "recipe[udev::net]"
   ]
 }

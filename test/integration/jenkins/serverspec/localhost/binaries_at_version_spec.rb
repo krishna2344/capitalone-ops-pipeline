@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'mkmf'
 
 pin_version = false
 
@@ -9,7 +10,6 @@ binaries = {
     version: '3.3.'
   },
   git: {
-    bin: '/usr/bin/git',
     version_arg: '--version',
     version: '1.9.'
   },
@@ -19,32 +19,32 @@ binaries = {
     version: '1.5'
   },
   docker: {
-    bin: '/usr/bin/docker',
     version_arg: '-v',
     version: '1.6.'
   },
   java: {
-    bin: '/usr/bin/java',
     version_arg: '-version 2>&1',
     version: '1.8.'
   },
 
   ksh: {
-    bin: '/usr/bin/ksh',
     version_arg: '--version 2>&1',
     version: '2012-08-01'
   },
 
   node: {
-    bin: '/usr/bin/node',
     version_arg: '-v',
     version: '0.10.'
   }
 }
 
-binaries.each do |_, hash|
-  describe file(hash[:bin]) do
-    it { should be_executable }
+binaries.each do |name, hash|
+  # either in path, or in path named by ":bin" in binaries hash
+  describe "binary named #{name}" do
+    it 'is executable' do
+      found = find_executable name.to_s
+      found || File.executable?(hash[:bin])
+    end
   end
 
   describe "#{hash[:bin]} #{hash[:version_arg]}", if: os[:family] == 'ubuntu' do

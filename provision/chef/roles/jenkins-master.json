@@ -74,7 +74,6 @@
       ]
     },
     "jenkins": {
-      "java": "/usr/lib/jvm/java-7-oracle/bin/java",
       "master": {
         "install_method": "package"
       }
@@ -108,7 +107,6 @@
     }
   },
   "run_list": [
-    "role[izanamee-desktop]",
     "recipe[packer]",
     "recipe[chef-dk]",
     "recipe[vagrant]",

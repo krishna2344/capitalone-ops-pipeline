@@ -1,3 +1,9 @@
+include_recipe 'apt'
+
+node['configure_headless']['packages'].each do |name|
+  package name
+end
+
 template '/etc/profile.d/bash_alias_iz.sh' do
   action [:create]
   source 'bash_aliases.erb'
