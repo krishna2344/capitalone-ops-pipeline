@@ -1,11 +1,14 @@
+Encoding.default_external = "UTF-8"
 source 'https://supermarket.chef.io'
 
 cookbook '7-zip',              '~> 1.0.2'
 cookbook 'apt',                '~> 2.8.0'
 cookbook 'ark',                '~> 0.4.0'
+cookbook 'chef-dk',            '~> 3.1.0'
 cookbook 'dmg',                '~> 2.2.2'
 cookbook 'docker',             '~> 1.0.23'
 cookbook 'firefox',            '~> 2.0.5'
+cookbook 'gem_installer',      '~> 0.1.2'
 cookbook 'gradle',             '~> 1.5.1'
 cookbook 'jenkins',            '~> 2.3.1'
 cookbook 'maven',              '~> 1.2.0'
@@ -17,6 +20,7 @@ cookbook 'runit',              '~> 1.7.2'
 cookbook 'sonarqube',          '~> 0.3.2'
 cookbook 'timezone_lwrp',      '~> 0.1.7'
 cookbook 'user',               '~> 0.4.2'
+cookbook 'vagrant',            '~> 0.3.1'
 cookbook 'virtualbox',         '~> 1.0.3'
 cookbook 'vmware_workstation', '~> 0.2.0'
 

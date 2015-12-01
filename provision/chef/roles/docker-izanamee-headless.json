@@ -4,6 +4,9 @@
   "json_class": "Chef::Role",
   "description": "The base role for a headless izanamee",
   "default_attributes": {
+    "apt": {
+      "compile_time_update": true
+    },
     "tz": "US/Eastern",
     "users": [
       "vagrant"
@@ -15,8 +18,11 @@
       "git",
       "libsvn-java",
       "unzip",
+      "libtool",
       "dos2unix",
-      "python-software-properties"
+      "python-software-properties",
+      "autotools-dev",
+      "libltdl-dev"
     ],
     "gradle": {
       "version": "1.12",
@@ -46,6 +52,7 @@
   "run_list": [
     "recipe[apt::default]",
     "recipe[packages]",
+    "recipe[gem_installer]",
     "recipe[java_install]",
     "recipe[user::data_bag]",
     "recipe[maven]",
