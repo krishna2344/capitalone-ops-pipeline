@@ -1,0 +1,58 @@
+{
+  "variables": {
+    "box_name": "izanamee/sonar-build",
+    "ami_name": "{{user `box_name`}} {{timestamp}}",
+    "instance_type": "t2.micro",
+    "region": "us-east-1",
+    "source_ami": "ami-d05e75b8",
+    "ssh_username": "ubuntu",
+    "vpc_id": "vpc-269c2542",
+    "security_group_id": "sg-a13db3c7",
+    "subnet_id": "subnet-f7d0ebdc"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "{{user `ami_name`}}",
+      "instance_type": "{{user `instance_type`}}",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "security_group_id": "{{user `security_group_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "tags": {
+        "OS_Version": "Ubuntu",
+        "Release": "Latest"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "packer/scripts/ami_setup.sh"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "execute_command": "{{if .Sudo}}sudo {{end}}chef-solo -l info -c {{.ConfigPath}} -j {{.JsonPath}}",
+      "cookbook_paths": [
+        "provision/chef/cookbooks",
+        "provision/chef/vendor-cookbooks"
+      ],
+      "json": {
+        "jenkins-job": {
+          "job-templates": {
+            "test_sonar": "test_sonar.xml.erb"
+          }
+        }
+      },
+      "data_bags_path": "provision/chef/data_bags",
+      "roles_path": "provision/chef/roles",
+      "run_list": [
+        "role[jenkins-headless]"
+      ]
+    }
+  ]
+}

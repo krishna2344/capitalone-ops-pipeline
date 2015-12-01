@@ -28,3 +28,10 @@ suites:
     run_list:
       - role[izanamee-headless]
     attributes:
+  - name: sonar
+    run_list:
+      - role[jenkins-headless]
+    attributes:
+      jenkins-job:
+        job-templates:
+          test_sonar: test_sonar.xml.erb
