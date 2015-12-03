@@ -1,62 +1,53 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<flow-definition plugin="workflow-job@1.10.1">
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.10.1">
-    <script>env.version = &quot;2.1.${env.BUILD_NUMBER}&quot;
+<flow-definition plugin="workflow-job@1.11"><actions/><description/><keepDependencies>false</keepDependencies><properties/><definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.11"><script>env.version = "2.1.${env.BUILD_NUMBER}"
+env.kitchen = "/opt/chefdk/bin/kitchen"
 
-stage &apos;checkout&apos;
+stage 'checkout'
   node {
-    git url: &apos;git@github.com:capitalone/Izanamee.git&apos;, credentialsId: &apos;1e13511b-a440-4850-870d-e06ab4b1e06e&apos;
-    stash includes: &apos;**&apos;, excludes: &apos;*.box,provision/chef/vendor-cookbooks/**,packer_cache/**,output-virtualbox-iso/**,output-vmware-iso/**,base-virtualbox/**,base-vmware/**,output-virtualbox-ovf/**,output-vmware-vmx/**&apos;, name: &apos;source&apos;
+    git url: 'git@github.com:capitalone/Izanamee.git', branch: 'add_centos', credentialsId: '1e13511b-a440-4850-870d-e06ab4b1e06e'
+    stash includes: '**', excludes: '*.box,provision/chef/vendor-cookbooks/**,packer_cache/**,output-virtualbox-iso/**,output-vmware-iso/**,base-virtualbox/**,base-vmware/**,output-virtualbox-ovf/**,output-vmware-vmx/**', name: 'source'
   }
 
-parallel  &apos;headless test&apos;: {
+parallel  'headless test': {
   node {
-    type = &apos;headless&apos;
-    unstash &apos;source&apos;
-    echo &quot;got version ${env.version}&quot;
-    sh &quot;kitchen create $type&quot;
+    type = 'headless-tompscanlan-headless'
+    unstash 'source'
+    echo "got version ${env.version}"
+
+    sh "${env.kitchen} create $type"
     retry(3) {
-      sh &quot;kitchen converge $type&quot;
+      sh "${env.kitchen} converge $type"
     }
     retry(3) {
-      sh &quot;kitchen verify $type&quot;
+      sh "${env.kitchen} verify $type"
     }
   }
-},  &apos;desktop test&apos;: {
+},  'desktop test': {
   node {
-    type = &apos;desktop&apos;
-    unstash &apos;source&apos;
-    sh &quot;kitchen create $type&quot;
+    type = 'desktop-tompscanlan-desktop'
+    unstash 'source'
+    sh "${env.kitchen} create $type"
     retry(3) {
-      sh &quot;kitchen converge $type&quot;
+      sh "${env.kitchen} converge $type"
     }
     retry(3) {
-      sh &quot;kitchen verify $type&quot;
+      sh "${env.kitchen} verify $type"
     }
   }
 }
 
-parallel &apos;headless build&apos;: {
+parallel 'headless build': {
   node {
-    type = &apos;headless&apos;
-    unstash &apos;source&apos;
-    sh &quot;./packer/build-${type}-boxes.sh&quot;
-    archive &apos;*${type}*${version}.box&apos;
+    type = 'headless'
+    unstash 'source'
+    sh "./packer/build-${type}-boxes.sh"
+    archive '*${type}*${version}.box'
   }
 
-}, &apos;desktop build&apos;: {
+}, 'desktop build': {
   node {
-    type = &apos;desktop&apos;
-    unstash &apos;source&apos;
-    sh &quot;./packer/build-${type}-boxes.sh&quot;
-    archive &apos;*${type}*${version}.box&apos;
+    type = 'desktop'
+    unstash 'source'
+    sh "./packer/build-${type}-boxes.sh"
+    archive '*${type}*${version}.box'
   }
-}</script>
-    <sandbox>false</sandbox>
-  </definition>
-  <triggers/>
-</flow-definition>
+}</script><sandbox>false</sandbox></definition><triggers/></flow-definition>

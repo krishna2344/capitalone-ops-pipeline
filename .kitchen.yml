@@ -23,14 +23,14 @@ platforms:
         memory: 256
     run_list:
       - role[izanamee-headless-centos]
-  - name: ubuntu
+  - name: tompscanlan-headless
     driver:
       box: tompscanlan/headless
       customize:
         memory: 256
     run_list:
       - role[izanamee-headless]
-  - name: ubuntu-desktop
+  - name: tompscanlan-desktop
     driver:
       box: tompscanlan/desktop
     run_list:
@@ -39,7 +39,7 @@ platforms:
 suites:
   - name: packer-builder
     includes:
-      - ubuntu-desktop
+      - tompscanlan-desktop
     run_list:
       - role[jenkins-master]
     customize:
@@ -48,7 +48,7 @@ suites:
   - name: jenkins
     includes:
       - centos
-      - ubuntu
+      - tompscanlan-headless
     run_list:
       - role[jenkins-headless]
     customize:
@@ -69,25 +69,25 @@ suites:
   - name: flamegraph
     includes:
       - centos
-      - ubuntu
-      - ubuntu-desktop
+      - tompscanlan-headless
+      - tompscanlan-desktop
     run_list:
       - role[flamegraph]
 
   - name: headless
     includes:
       - centos
-      - ubuntu
+      - tompscanlan-headless
 
   - name: desktop
     includes:
-      - ubuntu-desktop
+      - tompscanlan-desktop
 
   - name: sonar
     includes:
       - centos
-      - ubuntu
-      - ubuntu-desktop
+      - tompscanlan-headless
+      - tompscanlan-desktop
     run_list:
       - role[jenkins-headless]
     attributes:
