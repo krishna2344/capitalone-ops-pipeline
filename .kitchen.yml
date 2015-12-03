@@ -18,21 +18,21 @@ provisioner:
 platforms:
   - name: centos
     driver:
-      box: izanamee/centos-headless
+      box: tompscanlan/centos-headless
       customize:
         memory: 256
     run_list:
       - role[izanamee-headless-centos]
   - name: ubuntu
     driver:
-      box: izanamee/headless
+      box: tompscanlan/headless
       customize:
         memory: 256
     run_list:
       - role[izanamee-headless]
   - name: ubuntu-desktop
     driver:
-      box: izanamee/desktop
+      box: tompscanlan/desktop
     run_list:
       - role[izanamee-desktop]
 

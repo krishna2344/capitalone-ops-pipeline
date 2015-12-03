@@ -1,3 +1,5 @@
+include_recipe 'apt'
+
 template '/etc/profile.d/bash_alias_iz.sh' do
   action [:create]
   source 'bash_aliases.erb'

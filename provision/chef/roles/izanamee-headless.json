@@ -5,7 +5,8 @@
   "description": "The base role for a headless izanamee",
   "default_attributes": {
     "apt": {
-      "compile_time_update": true
+      "compiletime": true,
+      "periodic_update_min_delay": 300
     },
     "tz": "US/Eastern",
     "users": [
@@ -57,7 +58,7 @@
     }
   },
   "run_list": [
-    "recipe[apt::default]",
+    "recipe[apt]",
     "recipe[packages]",
     "recipe[gem_installer]",
     "recipe[java_install]",

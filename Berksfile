@@ -2,12 +2,11 @@ Encoding.default_external = "UTF-8"
 source 'https://supermarket.chef.io'
 
 cookbook '7-zip',              '~> 1.0.2'
-cookbook 'apt',                '~> 2.8.0'
+cookbook 'apt',                '~> 2.9.2'
 cookbook 'ark',                '~> 0.4.0'
 cookbook 'chef-dk',            '~> 3.1.0'
 cookbook 'dmg',                '~> 2.2.2'
 cookbook 'docker',             '~> 1.0.23'
-cookbook 'firefox',            '~> 2.0.5'
 cookbook 'gem_installer',      '~> 0.1.2'
 cookbook 'gradle',             '~> 1.5.1'
 cookbook 'jenkins',            '~> 2.3.1'

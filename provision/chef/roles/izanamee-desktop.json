@@ -4,13 +4,14 @@
   "json_class": "Chef::Role",
   "description": "The base role for a desktop izanamee",
   "default_attributes": {
+    "packages": [
+      "firefox"
+    ]
   },
   "run_list": [
-    "recipe[apt::default]",
-    "role[izanamee-headless]",
+    "recipe[packages]",
     "recipe[xubuntu-desktop-pkg]",
     "recipe[spring_tool_suite]",
-    "recipe[firefox]",
     "recipe[install_chrome]",
     "recipe[configure_desktop]"
   ]
