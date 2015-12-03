@@ -1,7 +1,7 @@
 ---
 driver:
   name: vagrant
-  provider: vmware_fusion
+  provider: virtualbox
   ssh:
     pty: true
   customize:
