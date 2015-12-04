@@ -1,5 +1,8 @@
 <flow-definition plugin="workflow-job@1.11"><actions/><description/><keepDependencies>false</keepDependencies><properties/><definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.11"><script>env.version = "2.1.${env.BUILD_NUMBER}"
 env.kitchen = "/opt/chefdk/bin/kitchen"
+headless_type = 'headless-tompscanlan-headless'
+desktop_type = 'desktop-tompscanlan-desktop'
+tests = false
 
 stage 'checkout'
   node {
@@ -9,45 +12,46 @@ stage 'checkout'
 
 parallel  'headless test': {
   node {
-    type = 'headless-tompscanlan-headless'
+      if (tests == true) {
     unstash 'source'
-    echo "got version ${env.version}"
+    echo "headless got version ${env.version}"
 
-    sh "${env.kitchen} create $type"
+    sh "${env.kitchen} create $headless_type"
     retry(3) {
-      sh "${env.kitchen} converge $type"
+      sh "${env.kitchen} converge $headless_type"
     }
     retry(3) {
-      sh "${env.kitchen} verify $type"
+      sh "${env.kitchen} verify $headless_type"
     }
+      }
   }
 },  'desktop test': {
   node {
-    type = 'desktop-tompscanlan-desktop'
+    if (tests == true  )  {
     unstash 'source'
-    sh "${env.kitchen} create $type"
+    echo "desktop got version ${env.version}"
+    sh "${env.kitchen} create $desktop_type"
     retry(3) {
-      sh "${env.kitchen} converge $type"
+      sh "${env.kitchen} converge $desktop_type"
     }
     retry(3) {
-      sh "${env.kitchen} verify $type"
+      sh "${env.kitchen} verify $desktop_type"
+    }
     }
   }
 }
 
 parallel 'headless build': {
   node {
-    type = 'headless'
     unstash 'source'
-    sh "./packer/build-${type}-boxes.sh"
-    archive '*${type}*${version}.box'
+    sh "./packer/build-headless-boxes.sh"
+    archive '*${headless_type}*${version}.box'
   }
 
 }, 'desktop build': {
   node {
-    type = 'desktop'
     unstash 'source'
-    sh "./packer/build-${type}-boxes.sh"
-    archive '*${type}*${version}.box'
+    sh "./packer/build-desktop-boxes.sh"
+    archive '*${desktop_type}*${version}.box'
   }
 }</script><sandbox>false</sandbox></definition><triggers/></flow-definition>
