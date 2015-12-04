@@ -1,11 +1,12 @@
 {
-  "name": "izanamee-headless",
+  "name": "docker-izanamee-headless",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "The base role for a headless izanamee",
+  "description": "Identical to izanamee-headless, minus the docker recipe. Base on dind if you need docker in docker.",
   "default_attributes": {
-    "apt": {
-      "compile_time_update": true
+      "apt": {
+      "compiletime": true,
+      "periodic_update_min_delay": 300
     },
     "tz": "US/Eastern",
     "users": [
@@ -39,13 +40,20 @@
         "checksum": "3a8dc4a12ab9f3607a1a2097bbab0150c947ad6719d8f1bb6d5b47d0fb0c4779"
       }
     },
+    "java_install": {
+      "java8": true,
+      "java7": true
+      },
     "java": {
+      "jdk_version": 8,
+      "java_home": "/usr/lib/jvm/java",
       "install_flavor": "oracle",
-      "jdk_version": "7",
-      "set_default": false,
-      "set_etc_environment": false,
+      "reset_alternatives": true,
+      "set_default": true,
+      "set_etc_environment": true,
+      "use_alt_suffix": true,
       "oracle": {
-        "accept_oracle_download_terms": "true"
+        "accept_oracle_download_terms": true
       }
     }
   },
