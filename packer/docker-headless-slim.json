@@ -1,8 +1,5 @@
 {
   "variables": {
-    "username": null,
-    "password": null,
-    "email": null,
     "version": null
   },
   "builders": [
