@@ -1,0 +1,180 @@
+{
+  "variables": {
+    "ubuntu_iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.3-server-amd64.iso",
+    "ubuntu_iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+    "ubuntu_iso_checksum_type": "md5",
+    "centos_iso_url": "http://mirror.umd.edu/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso",
+    "centos_iso_checksum": "9381a24b8bee2fed0c26896141a64b69",
+    "centos_iso_checksum_type": "md5",
+    "memory": "512",
+    "cpu": "1",
+    "headless": "true",
+    "disk_size": "20000",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant"
+  },
+  "builders": [
+    {
+      "name": "ubuntu-virtualbox",
+      "vm_name": "ubuntu-virtualbox-iso",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
+        "hostname={{ .Name }} <wait>",
+        "fb=false debconf/frontend=noninteractive <wait>",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "guest_os_type": "Ubuntu_64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `ubuntu_iso_checksum`}}",
+      "iso_checksum_type": "{{user `ubuntu_iso_checksum_type`}}",
+      "iso_url": "{{user `ubuntu_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `memory`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{user `cpu`}}"
+        ]
+      ]
+    },
+    {
+      "name": "ubuntu-vmware",
+      "vm_name": "ubuntu-vmware-iso",
+      "type": "vmware-iso",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
+        "hostname={{ .Name }} <wait>",
+        "fb=false debconf/frontend=noninteractive <wait>",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "guest_os_type": "ubuntu-64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `ubuntu_iso_checksum`}}",
+      "iso_checksum_type": "{{user `ubuntu_iso_checksum_type`}}",
+      "iso_url": "{{user `ubuntu_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "tools_upload_flavor": "linux",
+      "tools_upload_path": "{{.Flavor}}.iso",
+      "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpu`}}",
+        "mks.3denable": false
+      }
+    },
+    {
+      "name": "centos-virtualbox",
+      "vm_name": "centos-virtualbox-iso",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "guest_os_type": "RedHat_64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `centos_iso_checksum`}}",
+      "iso_checksum_type": "{{user `centos_iso_checksum_type`}}",
+      "iso_url": "{{user `centos_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_pty": true,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
+      "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `memory`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{user `cpu`}}"
+        ]
+      ]
+    },
+    {
+      "name": "centos-vmware",
+      "vm_name": "centos-vmware-iso",
+      "type": "vmware-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "guest_os_type": "centos-64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `centos_iso_checksum`}}",
+      "iso_checksum_type": "{{user `centos_iso_checksum_type`}}",
+      "iso_url": "{{user `centos_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_pty": true,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
+      "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpu`}}",
+        "mks.3denable": false
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "packer/scripts/base_setup_ubuntu.sh"
+      ],
+      "only": ["ubuntu-virtualbox", "ubuntu-vmware"]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "packer/scripts/base_setup_centos.sh",
+        "packer/scripts/vagrant.sh",
+        "packer/scripts/host_tools.sh",
+        "packer/scripts/clean_centos.sh"
+      ],
+      "only": ["centos-virtualbox", "centos-vmware"]
+    }
+  ]
+}

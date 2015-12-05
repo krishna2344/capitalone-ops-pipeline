@@ -5,7 +5,8 @@
   "description": "The base role for a headless izanamee, based on CentOS",
   "default_attributes": {
     "apt": {
-      "compile_time_update": true
+      "compiletime": true,
+      "periodic_update_min_delay": 300
     },
     "tz": "US/Eastern",
     "users": [

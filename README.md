@@ -2,11 +2,11 @@
 
 <img src="izanamee-logo.png" width="400" alt="izanamee" />
 
-Project "Izanamee" (internal working title, external branding tbd) is a set 
+Project "Izanamee" (internal working title, external branding tbd) is a set
 of virtual machines based on a similar family used internally
 at Capital One for layered Java development environments.  We are contributing
 these  to the Open Source community to help facilitate a quick-start, level
-playing field for hack-a-thons.  
+playing field for hack-a-thons.
 
 # Background
 Capital One needed to provide a consistent way in getting development teams
@@ -23,9 +23,9 @@ we have also been able to seed a DevOps mentality earlier.
 Izanamee derives its name from the Japanese goddess (_Izanami-no-Mikoto_) of
 both creation and death.  We chose it as a nod to the power and flexibility that
 `vagrant up` and `vagrant destroy` provides us.  Hats off to Mitchell
-Hashimoto and the team at [Hashicorp] (https://www.hashicorp.com) for creating
+Hashimoto and the team at [Hashicorp](https://www.hashicorp.com) for creating
 and supporting this terrific tool, and for hosting the [Atlas](https://atlas.hashicorp.com/izanamee)
-public registry of Vagrant images where we are able publish our images. 
+public registry of Vagrant images where we are able publish our images.
 
 # Izanamee Family of Virtual Machines
 
@@ -38,7 +38,7 @@ __ubunty/trusty64 (14.04)__:
  * Node/NPM
  * Oracle 7 & 8 JDK
  * Maven & Gradle
- * Tomcat 7 & 8
+ * Tomcat 7 & 8 (not added yet)
 
 * __Desktop (GUI, 2Gb image)__:
  * Inventory of Headless +
@@ -51,15 +51,15 @@ For specifics on package versions, please visit the [Release History](https://gi
 
 # Host System Requirements
 
-* __Headless__: 
- * For Docker and/or Java development, we recommend having at least 8Gb RAM on your host 
+* __Headless__:
+ * For Docker and/or Java development, we recommend having at least 8Gb RAM on your host
     device as we allocate 4Gb RAM by default.
  * Less RAM is needed for microservices development in languages like Node, Python or Go.
     Tune this setting in the Vagrantfile.
  * We generally recommend having 10-20Gb free disk.
 
 * __Desktop__:
- * For Docker and/or Java development, we recommend having 16Gb RAM on your host 
+ * For Docker and/or Java development, we recommend having 16Gb RAM on your host
     device as we allocate 8Gb RAM by default for the guest.  Tune as needed in the Vagrantfile.
  * Less RAM is needed for microservices development in languages like Node, Python or Go.
     Tune this setting in the Vagrantfile.
@@ -97,7 +97,7 @@ begin using the Izanamee family of virtual machines:
   the .msi installer, you may need to uninstall it if you would like to use
   Chocolatey going forward which is recommended for non-managed desktops.
 
-  To install Chocolatey, open an administrative cmd.exe command prompt:     
+  To install Chocolatey, open an administrative cmd.exe command prompt:
   ```
   C:\> @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex
   ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"
@@ -141,7 +141,7 @@ machine and they will automatically be available within the Izanamee virtual
 machine.  This is especially useful in the case of working on the headless
 image as you can continue to use GUI IDEs for development.  Additionally, you
 can execute `git` commands and they will work the same on your host machine and
-within the Izanamee virtual machine.  
+within the Izanamee virtual machine.
 
 # FAQ
 FAQs are hosted on our wiki at https://github.com/capitalone/Izanamee/wiki/FAQ

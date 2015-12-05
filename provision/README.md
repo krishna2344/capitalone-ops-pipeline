@@ -3,9 +3,21 @@
 
 There are 2 main ways to go about building more future Izanamee revisions.
 
+1. Run builds manually
 1. Stand up a local VMware vm with tools to build the VMs and manage
    your own vagrant version catalog
 1. Leverage [Atlas](https://atlas.hashicorp.com/) to build and host boxes
+
+
+## Building manually
+
+This is really a subset of the following section.  If you want to run builds manually,
+install:
+
+* [packer](http://packer.io)
+* vmware, virtualbox, docker, as needed for what you want to build
+
+Then you can run builds as described in the [section below](#build).
 
 
 ## Build your own build server for building VMs
@@ -43,27 +55,34 @@ You may need to install some of the following vagrant plugins to get everything 
         $ berks vendor provision/chef/vendor-cookbooks
 
 
-1. Log in and start a build.
-   Builds can be done as 2 stages to allow saving some time if you care to reuse
+1. <a name="build"/>Log in and start a build
+
+   Builds are done as 2 stages to allow saving some time by reusing
    the same base VM as a starting point for provisioning.
 
-        $ vagrant ssh
-        $ cd /vagrant
-        $ version=0.20
+        vagrant ssh
+        cd /vagrant
+        version=0.20
 
-        $ # first stage builds the vms, which can be re-used in stage2
-        $ packer build -var "version=$version" packer/headless-stage-1.json
+        # first stage builds the vms for both vmware and virtualbox, which can be
+        # re-used in the next stage
 
-        $ # second stage packages the boxes by provisioning on top of the base vm
-        $ packer build -var "version=$version" packer/headless-stage-2.json
+        # first an ubuntu base
+        packer build -var "version=$version" packer/ubuntu-iso-to-vm.json
 
-        $ # later ....
-        $ ls *.box
+        # then a centOS base
+        packer build -var "version=$version" packer/centos-iso-to-vm.json
 
-        $ # Add the boxes to your local setup.
-        $ # Alternativly, upload them to a url internally (discussed below), or atlas.
-        $ vagrant box add --force --name izanamee/headless headless-vmware-iso-${version}.box
-        $ vagrant box add --force --name izanamee/headless headless-virtualbox-iso-${version}.box
+        # second stage packages the boxes by provisioning on top of the base vm
+        packer build -var "version=$version" packer/headless-stage-2.json
+
+        # later ....
+        ls *.box
+
+        # Add the boxes to your local setup.
+        # Alternativly, upload them to a url internally (discussed below), or atlas.
+        vagrant box add --force --name izanamee/headless headless-vmware-iso-${version}.box
+        vagrant box add --force --name izanamee/headless headless-virtualbox-iso-${version}.box
 
 ## Leverage Atlas
 
