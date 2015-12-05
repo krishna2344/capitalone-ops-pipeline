@@ -8,7 +8,7 @@
     "headless": "true"
   },
   "builders": [
-      {
+    {
       "name": "ubuntu-docker",
       "type": "docker",
       "image": "ubuntu:trusty",
@@ -56,7 +56,6 @@
         ]
       ]
     },
-
     {
       "name": "ubuntu-vmware",
       "vm_name": "ubuntu-vmware",
@@ -79,7 +78,9 @@
         "mks.3denable": false
       }
     },
-        {
+    {
+      "communicator": "ssh",
+      "ssh_pty": true,
       "name": "centos-virtualbox",
       "vm_name": "centos-virtualbox",
       "type": "virtualbox-ovf",
@@ -109,6 +110,8 @@
       ]
     },
     {
+      "communicator": "ssh",
+      "ssh_pty": true,
       "name": "centos-vmware",
       "vm_name": "centos-vmware",
       "type": "vmware-vmx",
@@ -143,8 +146,10 @@
       "run_list": [
         "role[izanamee-{{user `role`}}]"
       ],
-      "only": ["ubuntu-virtualbox", "ubuntu-vmware"]
-
+      "only": [
+        "ubuntu-virtualbox",
+        "ubuntu-vmware"
+      ]
     },
     {
       "type": "chef-solo",
@@ -157,23 +162,19 @@
       "run_list": [
         "role[izanamee-{{user `role`}}-centos]"
       ],
-      "only": ["centos-virtualbox", "centos-vmware"]
+      "only": [
+        "centos-virtualbox",
+        "centos-vmware"
+      ]
     },
-    {
-      "type": "shell",
-      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
-      "scripts": [
-        "packer/scripts/zero_disk.sh"
-      ],
-      "only": ["centos-virtualbox", "centos-vmware"]
-    },
-
     {
       "type": "shell",
       "scripts": [
         "packer/scripts/base_docker_setup_ubuntu.sh"
       ],
-      "only": ["ubuntu-docker"]
+      "only": [
+        "ubuntu-docker"
+      ]
     },
     {
       "type": "chef-solo",
@@ -186,27 +187,34 @@
       "run_list": [
         "role[docker-izanamee-{{user `role`}}]"
       ],
-      "only": ["ubuntu-docker"]
+      "only": [
+        "ubuntu-docker"
+      ]
     },
-
     {
       "type": "shell",
       "scripts": [
         "packer/scripts/alpine_docker_base.sh"
       ],
-      "only": ["alpine-docker"]
+      "only": [
+        "alpine-docker"
+      ]
     },
     {
       "type": "ansible-local",
       "playbook_file": "provision/ansible/playbooks/local.yml",
-      "only": ["alpine-docker"]
+      "only": [
+        "alpine-docker"
+      ]
     },
     {
       "type": "shell",
       "scripts": [
         "packer/scripts/alpine_docker_clean.sh"
       ],
-      "only": ["alpine-docker"]
+      "only": [
+        "alpine-docker"
+      ]
     }
   ],
   "post-processors": [
@@ -214,32 +222,44 @@
       "type": "vagrant",
       "output": "{{user `org`}}-{{user `role`}}-{{.BuildName}}-{{user `version`}}.box",
       "keep_input_artifact": true,
-      "only": ["centos-virtualbox", "centos-vmware", "ubuntu-virtualbox", "ubuntu-vmware"]
+      "only": [
+        "centos-virtualbox",
+        "centos-vmware",
+        "ubuntu-virtualbox",
+        "ubuntu-vmware"
+      ]
     },
     {
       "type": "docker-tag",
       "repository": "{{user `org`}}/ubuntu-{{user `role`}}",
       "tag": "{{user `version`}}",
       "force": true,
-      "only": ["ubuntu-docker"]
+      "only": [
+        "ubuntu-docker"
+      ]
     },
     {
       "type": "docker-save",
       "path": "{{user `org`}}-ubuntu-{{user `role`}}-{{user `version`}}.tar",
-      "only": ["ubuntu-docker"]
+      "only": [
+        "ubuntu-docker"
+      ]
     },
     {
       "type": "docker-tag",
       "repository": "{{user `org`}}/alpine-{{user `role`}}",
       "tag": "{{user `version`}}",
       "force": true,
-      "only": ["alpine-docker"]
+      "only": [
+        "alpine-docker"
+      ]
     },
     {
       "type": "docker-save",
-      "path": "foo.tar",
       "path": "{{user `org`}}-alpine-{{user `role`}}-{{user `version`}}.tar",
-      "only": ["alpine-docker"]
+      "only": [
+        "alpine-docker"
+      ]
     }
   ]
 }
