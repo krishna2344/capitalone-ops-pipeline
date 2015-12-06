@@ -31,14 +31,12 @@ firewall 'default'
 firewall_rule 'http' do
   port 80
   protocol :tcp
-  position 1
   action :allow
 end
 
 firewall_rule 'node.js' do
   port 3000
   protocol :tcp
-  position 2
   action :allow
 end
 
