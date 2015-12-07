@@ -25,20 +25,23 @@ web_app 'flamegraph' do
   cookbook 'apache2'
 end
 
-firewall 'default'
+# don't do firewall stuff in docker
+#unless node['virtualization']['systems']['docker'] == 'guest'
+  firewall 'default'
 
-# open standard http port to tcp traffic only; insert as first rule
-firewall_rule 'http' do
-  port 80
-  protocol :tcp
-  action :allow
-end
+  # open standard http port to tcp traffic only; insert as first rule
+  firewall_rule 'http' do
+    port 80
+    protocol :tcp
+    action :allow
+  end
 
-firewall_rule 'node.js' do
-  port 3000
-  protocol :tcp
-  action :allow
-end
+  firewall_rule 'node.js' do
+    port 3000
+    protocol :tcp
+    action :allow
+  end
+#end
 
 nodejs_npm 'flamegraph-gui' do
   url 'github tompscanlan/flamegraph-gui'
