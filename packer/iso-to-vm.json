@@ -1,5 +1,10 @@
 {
   "variables": {
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "no_proxy": "{{env `no_proxy`}}",
+
     "ubuntu_iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.3-server-amd64.iso",
     "ubuntu_iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
     "ubuntu_iso_checksum_type": "md5",
@@ -160,8 +165,27 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline": [
+        "sudo sed '$ a export http_proxy={{user `http_proxy`}}\\nexport https_proxy={{user `https_proxy`}}\\n' /etc/profile"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "only": ["ubuntu-virtualbox", "ubuntu-vmware"]
+    },
+    {
+      "type": "shell",
       "scripts": [
         "packer/scripts/base_setup_ubuntu.sh"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
       ],
       "only": ["ubuntu-virtualbox", "ubuntu-vmware"]
     },
@@ -173,6 +197,12 @@
         "packer/scripts/vagrant.sh",
         "packer/scripts/host_tools.sh",
         "packer/scripts/clean_centos.sh"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
       ],
       "only": ["centos-virtualbox", "centos-vmware"]
     }
