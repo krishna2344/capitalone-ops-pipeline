@@ -162,6 +162,21 @@
     }
   ],
   "provisioners": [
+   {
+      "type": "shell",
+      "scripts": [
+        "packer/scripts/base_setup.sh",
+        "packer/scripts/vagrant.sh",
+        "packer/scripts/host_tools.sh",
+        "packer/scripts/clear_udev_rules.sh"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ]
+    },
     {
       "type": "chef-solo",
       "cookbook_paths": [
@@ -178,26 +193,6 @@
       },
       "run_list": [
         "recipe[chef_solo_proxy]"
-      ]
-    },
-   {
-      "type": "shell",
-      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
-      "scripts": [
-        "packer/scripts/base_setup_centos.sh",
-        "packer/scripts/vagrant.sh",
-        "packer/scripts/host_tools.sh",
-        "packer/scripts/clean_centos.sh"
-      ],
-      "environment_vars": [
-        "http_proxy={{user `http_proxy`}}",
-        "https_proxy={{user `https_proxy`}}",
-        "ftp_proxy={{user `ftp_proxy`}}",
-        "no_proxy={{user `no_proxy`}}"
-      ],
-      "only": [
-        "centos-virtualbox",
-        "centos-vmware"
       ]
     },
     {
