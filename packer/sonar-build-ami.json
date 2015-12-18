@@ -31,7 +31,7 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/ami_setup.sh"
+        "packer/scripts/ami_setup_ubuntu.sh"
       ]
     },
     {
@@ -51,7 +51,7 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[jenkins-headless]"
+        "role[jenkinsonar]"
       ]
     }
   ]

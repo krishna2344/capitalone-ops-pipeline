@@ -1,62 +1,84 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<flow-definition plugin="workflow-job@1.10.1">
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.10.1">
-    <script>env.version = &quot;2.1.${env.BUILD_NUMBER}&quot;
+<flow-definition plugin="workflow-job@1.11"><actions/><description/><keepDependencies>false</keepDependencies><properties/><definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@1.11"><script>
+env.version = "2.1.${env.BUILD_NUMBER}"
+env.kitchen = "/opt/chefdk/bin/kitchen"
+headless_type = 'headless-tompscanlan-headless'
+desktop_type = 'desktop-tompscanlan-desktop'
+tests = false
 
-stage &apos;checkout&apos;
+docker = true
+headless = true
+desktop = true
+
+verbose_logging=1
+
+stage 'checkout'
   node {
-    git url: &apos;git@github.com:capitalone/Izanamee.git&apos;, credentialsId: &apos;1e13511b-a440-4850-870d-e06ab4b1e06e&apos;
-    stash includes: &apos;**&apos;, excludes: &apos;*.box,provision/chef/vendor-cookbooks/**,packer_cache/**,output-virtualbox-iso/**,output-vmware-iso/**,base-virtualbox/**,base-vmware/**,output-virtualbox-ovf/**,output-vmware-vmx/**&apos;, name: &apos;source&apos;
+    git url: 'git@github.com:capitalone/Izanamee.git', branch: 'add_centos', credentialsId: '1e13511b-a440-4850-870d-e06ab4b1e06e'
+    stash includes: '**', excludes: '*.box,provision/chef/vendor-cookbooks/**,packer_cache/**,output-virtualbox-iso/**,output-vmware-iso/**,base-virtualbox/**,base-vmware/**,output-virtualbox-ovf/**,output-vmware-vmx/**', name: 'source'
   }
 
-parallel  &apos;headless test&apos;: {
+parallel 'headless test': {
   node {
-    type = &apos;headless&apos;
-    unstash &apos;source&apos;
-    echo &quot;got version ${env.version}&quot;
-    sh &quot;kitchen create $type&quot;
-    retry(3) {
-      sh &quot;kitchen converge $type&quot;
-    }
-    retry(3) {
-      sh &quot;kitchen verify $type&quot;
+    if (tests == true) {
+      unstash 'source'
+      echo "headless got version ${env.version}"
+
+      sh "${env.kitchen} create $headless_type"
+      retry(3) {
+        sh "${env.kitchen} converge $headless_type"
+      }
+      retry(3) {
+        sh "${env.kitchen} verify $headless_type"
+      }
     }
   }
-},  &apos;desktop test&apos;: {
+}, 'desktop test': {
   node {
-    type = &apos;desktop&apos;
-    unstash &apos;source&apos;
-    sh &quot;kitchen create $type&quot;
-    retry(3) {
-      sh &quot;kitchen converge $type&quot;
-    }
-    retry(3) {
-      sh &quot;kitchen verify $type&quot;
+    if (tests == true  )  {
+      unstash 'source'
+      echo "desktop got version ${env.version}"
+      sh "${env.kitchen} create $desktop_type"
+      retry(3) {
+        sh "${env.kitchen} converge $desktop_type"
+      }
+      retry(3) {
+        sh "${env.kitchen} verify $desktop_type"
+      }
     }
   }
 }
 
-parallel &apos;headless build&apos;: {
+stage 'build images'
+parallel 'headless build': {
   node {
-    type = &apos;headless&apos;
-    unstash &apos;source&apos;
-    sh &quot;./packer/build-${type}-boxes.sh&quot;
-    archive &apos;*${type}*${version}.box&apos;
+    if (headless == true) {
+      unstash 'source'
+      sh "./packer/build-iso-to-vm.sh"
+      sh "PACKER_LOG=${verbose_logging} packer build -force -var 'version=${env.version}' packer/headless-stage-2.json"
+      archive '*${headless_type}*${env.version}.box'
+    }
   }
 
-}, &apos;desktop build&apos;: {
+}, 'desktop build': {
   node {
-    type = &apos;desktop&apos;
-    unstash &apos;source&apos;
-    sh &quot;./packer/build-${type}-boxes.sh&quot;
-    archive &apos;*${type}*${version}.box&apos;
+    if (desktop == true) {
+      unstash 'source'
+      sh "./packer/build-iso-to-vm.sh"
+      sh "PACKER_LOG=${verbose_logging} packer build -force -var 'version=${env.version}' packer/desktop-stage-2.json"
+      archive '*${desktop_type}*${env.version}.box'
+    }
   }
-}</script>
-    <sandbox>false</sandbox>
-  </definition>
-  <triggers/>
-</flow-definition>
+
+}, 'docker build': {
+  node {
+    if (docker == true) {
+      unstash 'source'
+
+      sh "PACKER_LOG=${verbose_logging} packer build -force -var 'version=${env.version}' packer/docker-headless-ubuntu.json"
+      sh "PACKER_LOG=${verbose_logging} packer build -force -var 'version=${env.version}' packer/docker-headless-slim.json"
+    }
+  }
+
+}
+
+</script><sandbox>false</sandbox></definition><triggers/></flow-definition>

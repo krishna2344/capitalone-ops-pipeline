@@ -1,0 +1,16 @@
+{
+  "name": "izanamee-desktop-centos",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The base role for a CentOS baseddesktop izanamee",
+  "default_attributes": {
+  },
+  "run_list": [
+    "recipe[apt::default]",
+    "role[izanamee-headless]",
+    "recipe[xubuntu-desktop-pkg]",
+    "recipe[spring_tool_suite]",
+    "recipe[firefox]",
+    "recipe[configure_desktop]"
+  ]
+}

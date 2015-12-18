@@ -2,6 +2,9 @@
 
 set -x
 
+# hope to pick up proxy settings if we can
+. /etc/profile
+
 apk update
 apk add curl
 apk add sudo

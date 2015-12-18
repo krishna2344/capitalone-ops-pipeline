@@ -66,6 +66,7 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
+        "role[izanamee-headless]",
         "role[izanamee-desktop]"
       ]
     }
