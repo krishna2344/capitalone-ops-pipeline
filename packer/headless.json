@@ -204,6 +204,31 @@
     }
   ],
   "provisioners": [
+   {
+      "type": "shell",
+      "scripts": [
+        "packer/scripts/base_setup.sh"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "only": [
+        "alpine-docker"
+      ]
+    },
+   {
+      "type": "shell",
+      "inline": [
+        "mkdir -p /packer-files"
+      ],
+      "only": [
+        "ubuntu-docker",
+        "alpine-docker"
+      ]
+    },
     {
       "type": "chef-solo",
       "cookbook_paths": [
@@ -220,7 +245,11 @@
       },
       "run_list": [
         "recipe[chef_solo_proxy]"
-      ]
+      ],
+      "except": [
+        "ubuntu-docker",
+        "alpine-docker"
+        ]
     },
     {
       "type": "chef-solo",
@@ -328,7 +357,11 @@
       },
       "run_list": [
         "recipe[chef_solo_proxy]"
-      ]
+      ],
+      "except": [
+        "ubuntu-docker",
+        "alpine-docker"
+        ]
     }
   ],
   "post-processors": [
