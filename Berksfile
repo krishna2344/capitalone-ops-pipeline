@@ -25,9 +25,10 @@ cookbook 'vagrant',            '~> 0.3.1'
 cookbook 'virtualbox',         '~> 1.0.3'
 cookbook 'vmware_workstation', '~> 0.2.0'
 
+cookbook 'chef_solo_proxy', git: 'https://github.com/tompscanlan/chef-solo-proxy.git'
+
 cookbook 'configure_desktop', path: 'provision/chef/cookbooks/configure_desktop'
 cookbook 'configure_headless', path: 'provision/chef/cookbooks/configure_headless'
-cookbook 'chef_solo_proxy', path: 'provision/chef/cookbooks/chef_solo_proxy'
 cookbook 'docker_install', path: 'provision/chef/cookbooks/docker_install'
 cookbook 'flamegraph', path: 'provision/chef/cookbooks/flamegraph'
 cookbook 'install_chrome', path: 'provision/chef/cookbooks/install_chrome'
@@ -37,3 +38,4 @@ cookbook 'jenkins-job', path: 'provision/chef/cookbooks/jenkins-job'
 cookbook 'packer-boss-jenkins', path: 'provision/chef/cookbooks/packer-boss-jenkins'
 cookbook 'spring_tool_suite', path: 'provision/chef/cookbooks/spring_tool_suite'
 cookbook 'xubuntu-desktop-pkg', path: 'provision/chef/cookbooks/xubuntu-desktop-pkg'
+
