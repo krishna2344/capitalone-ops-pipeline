@@ -1,12 +1,13 @@
 {
   "variables": {
+    "atlas_token": "{{env `ATLAS_TOKEN`}}",
+    "role": "{{env `packer_role`}}",
+    "org": "{{env `packer_org`}}",
+    "version": "{{env `build_version`}}",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
-    "org": "tompscanlan",
-    "role": "headless",
-    "version": null,
     "memory": "512",
     "cpu": "1",
     "headless": "true",
@@ -22,8 +23,16 @@
     "disk_size": "20000",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "ssh_keypair_name": "",
-    "ssh_private_key_file": "ec2.pem"
+    "ubuntu_iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.3-server-amd64.iso",
+    "ubuntu_iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+    "ubuntu_iso_checksum_type": "md5",
+    "centos_iso_url": "http://mirror.umd.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
+    "centos_iso_checksum": "88c0437f0a14c6e2c94426df9d43cd67",
+    "centos_iso_checksum_type": "md5",
+    "docker_repo_username": "{{env `docker_repo_username`}}",
+    "docker_repo_password": "{{env `docker_repo_password`}}",
+    "docker_repo_server": "{{env `docker_repo_server`}}",
+    "docker_repo_email": "{{env `docker_repo_email`}}"
   },
   "builders": [
     {
@@ -37,8 +46,6 @@
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
-      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-      "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
       "tags": {
         "OS_Version": "Ubuntu",
         "Release": "Latest"
@@ -51,67 +58,42 @@
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
       "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_username": "{{user `ami_ssh_username`}}",
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
-      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-      "ssh_keypair_name": "{{{user `ssh_keypair_name`}}",
       "tags": {
-        "OS_Version": "Centos",
+        "OS_Version": "CentOS",
         "Release": "Latest"
       }
-    },
-    {
-      "name": "rhel-ami",
-      "type": "amazon-ebs",
-      "ami_name": "{{user `org`}}rhel-{{user `role`}} {{timestamp}}",
-      "instance_type": "{{user `ami_instance_type`}}",
-      "region": "{{user `ami_region`}}",
-      "source_ami": "{{user `ami_rhel_source`}}",
-      "ssh_username": "{{user `ssh_username`}}",
-      "vpc_id": "{{user `ami_vpc_id`}}",
-      "security_group_id": "{{user `ami_security_group_id`}}",
-      "subnet_id": "{{user `ami_subnet_id`}}",
-      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-      "ssh_keypair_name": "{{{user `ssh_keypair_name`}}",
-      "tags": {
-        "OS_Version": "RHEL",
-        "Release": "Latest"
-      }
-    },
-    {
-      "name": "ubuntu-docker",
-      "type": "docker",
-      "image": "ubuntu:trusty",
-      "commit": true
-    },
-    {
-      "name": "alpine-docker",
-      "type": "docker",
-      "image": "docker:dind",
-      "commit": true,
-      "run_command": [
-        "-d",
-        "-i",
-        "-t",
-        "{{.Image}}",
-        "/bin/sh"
-      ]
     },
     {
       "name": "ubuntu-virtualbox",
-      "vm_name": "ubuntu-virtualbox",
-      "output_directory": "output-ubuntu-virtualbox-ovf",
-      "type": "virtualbox-ovf",
+      "type": "virtualbox-iso",
+      "output_directory": "base-virtualbox",
+      "vm_name": "packer-virtualbox-iso",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
+        "hostname={{ .Name }} <wait>",
+        "fb=false debconf/frontend=noninteractive <wait>",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ],
       "boot_wait": "10s",
-      "source_path": "output-ubuntu-virtualbox/ubuntu-virtualbox-iso.ovf",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "guest_os_type": "Ubuntu_64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `ubuntu_iso_checksum`}}",
+      "iso_checksum_type": "{{user `ubuntu_iso_checksum_type`}}",
+      "iso_url": "{{user `ubuntu_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
       "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
       "virtualbox_version_file": ".vbox_version",
       "vboxmanage": [
         [
@@ -130,19 +112,32 @@
     },
     {
       "name": "ubuntu-vmware",
-      "vm_name": "ubuntu-vmware",
-      "type": "vmware-vmx",
-      "output_directory": "output-ubuntu-vmware-vmx",
+      "type": "vmware-iso",
+      "output_directory": "base-vmware",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
+        "hostname={{ .Name }} <wait>",
+        "fb=false debconf/frontend=noninteractive <wait>",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ],
       "boot_wait": "10s",
-      "source_path": "output-ubuntu-vmware/ubuntu-vmware-iso.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "guest_os_type": "ubuntu-64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `ubuntu_iso_checksum`}}",
+      "iso_checksum_type": "{{user `ubuntu_iso_checksum_type`}}",
+      "iso_url": "{{user `ubuntu_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
       "tools_upload_flavor": "linux",
       "tools_upload_path": "{{.Flavor}}.iso",
       "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
         "memsize": "{{user `memory`}}",
@@ -151,20 +146,26 @@
       }
     },
     {
-      "communicator": "ssh",
-      "ssh_pty": true,
       "name": "centos-virtualbox",
-      "vm_name": "centos-virtualbox",
-      "type": "virtualbox-ovf",
-      "output_directory": "output-centos-virtualbox-ovf",
+      "vm_name": "centos-virtualbox-iso",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
       "boot_wait": "10s",
-      "source_path": "output-centos-virtualbox/centos-virtualbox-iso.ovf",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "guest_os_type": "RedHat_64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `centos_iso_checksum`}}",
+      "iso_checksum_type": "{{user `centos_iso_checksum_type`}}",
+      "iso_url": "{{user `centos_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
+      "ssh_pty": true,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
       "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
       "virtualbox_version_file": ".vbox_version",
       "vboxmanage": [
         [
@@ -182,22 +183,26 @@
       ]
     },
     {
-      "communicator": "ssh",
-      "ssh_pty": true,
       "name": "centos-vmware",
-      "vm_name": "centos-vmware",
-      "type": "vmware-vmx",
-      "output_directory": "output-centos-vmware-vmx",
+      "vm_name": "centos-vmware-iso",
+      "type": "vmware-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
       "boot_wait": "10s",
-      "source_path": "output-centos-vmware/centos-vmware-iso.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "guest_os_type": "centos-64",
+      "http_directory": "packer/http",
+      "iso_checksum": "{{user `centos_iso_checksum`}}",
+      "iso_checksum_type": "{{user `centos_iso_checksum_type`}}",
+      "iso_url": "{{user `centos_iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
+      "ssh_pty": true,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
-      "tools_upload_flavor": "linux",
-      "tools_upload_path": "{{.Flavor}}.iso",
       "headless": "{{user `headless`}}",
+      "disk_size": "{{user `disk_size`}}",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
         "memsize": "{{user `memory`}}",
@@ -223,16 +228,6 @@
       ]
     },
     {
-      "type": "shell",
-      "inline": [
-        "mkdir -p /packer-files"
-      ],
-      "only": [
-        "ubuntu-docker",
-        "alpine-docker"
-      ]
-    },
-    {
       "type": "chef-solo",
       "cookbook_paths": [
         "provision/chef/cookbooks",
@@ -248,10 +243,6 @@
       },
       "run_list": [
         "recipe[chef_solo_proxy]"
-      ],
-      "except": [
-        "ubuntu-docker",
-        "alpine-docker"
       ]
     },
     {
@@ -263,65 +254,7 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[izanamee-{{user `role`}}]"
-      ],
-      "only": [
-        "ubuntu-virtualbox",
-        "ubuntu-vmware",
-        "centos-virtualbox",
-        "centos-vmware",
-        "ubuntu-ami",
-        "centos-ami",
-        "rhel-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/base_docker_setup_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "chef-solo",
-      "cookbook_paths": [
-        "provision/chef/cookbooks",
-        "provision/chef/vendor-cookbooks"
-      ],
-      "data_bags_path": "provision/chef/data_bags",
-      "roles_path": "provision/chef/roles",
-      "run_list": [
-        "role[docker-izanamee-{{user `role`}}]"
-      ],
-      "only": [
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/alpine_docker_base.sh"
-      ],
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
-      "type": "ansible-local",
-      "playbook_file": "provision/ansible/playbooks/local.yml",
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/alpine_docker_clean.sh"
-      ],
-      "only": [
-        "alpine-docker"
+        "role[{{user `role`}}]"
       ]
     },
     {
@@ -345,6 +278,16 @@
       ]
     },
     {
+      "type": "shell",
+      "scripts": [
+        "packer/scripts/clear_udev_rules.sh"
+      ],
+      "only": [
+        "centos-vmware",
+        "centos-virtualbox"
+      ]
+    },
+    {
       "type": "chef-solo",
       "cookbook_paths": [
         "provision/chef/cookbooks",
@@ -360,57 +303,75 @@
       },
       "run_list": [
         "recipe[chef_solo_proxy]"
-      ],
-      "except": [
-        "ubuntu-docker",
-        "alpine-docker"
       ]
     }
   ],
   "post-processors": [
-    {
-      "type": "vagrant",
-      "output": "{{user `org`}}-{{user `role`}}-{{.BuildName}}-{{user `version`}}.box",
-      "keep_input_artifact": true,
-      "only": [
-        "centos-virtualbox",
-        "centos-vmware",
-        "ubuntu-virtualbox",
-        "ubuntu-vmware"
-      ]
-    },
-    {
-      "type": "docker-tag",
-      "repository": "{{user `org`}}/ubuntu-{{user `role`}}",
-      "tag": "{{user `version`}}",
-      "force": true,
-      "only": [
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "docker-save",
-      "path": "{{user `org`}}-ubuntu-{{user `role`}}-{{user `version`}}.tar",
-      "only": [
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "docker-tag",
-      "repository": "{{user `org`}}/alpine-{{user `role`}}",
-      "tag": "{{user `version`}}",
-      "force": true,
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
-      "type": "docker-save",
-      "path": "{{user `org`}}-alpine-{{user `role`}}-{{user `version`}}.tar",
-      "only": [
-        "alpine-docker"
-      ]
-    }
+    [
+      {
+        "type": "vagrant",
+        "output": "{{user `org`}}-{{user `role`}}-{{.BuildName}}-{{user `version`}}.box",
+        "keep_input_artifact": true,
+        "only": [
+          "centos-virtualbox",
+          "centos-vmware",
+          "ubuntu-virtualbox",
+          "ubuntu-vmware"
+        ]
+      },
+      {
+        "token": "{{user `atlas_token`}}",
+        "type": "atlas",
+        "only": [
+          "centos-vmware"
+        ],
+        "artifact": "{{user `org`}}/{{user `role`}}-centos",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "vmware_desktop",
+          "version": "{{user `version`}}"
+        }
+      },
+      {
+        "token": "{{user `atlas_token`}}",
+        "type": "atlas",
+        "only": [
+          "ubuntu-vmware"
+        ],
+        "artifact": "{{user `org`}}/{{user `role`}}-ubuntu",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "vmware_desktop",
+          "version": "{{user `version`}}"
+        }
+      },
+      {
+        "token": "{{user `atlas_token`}}",
+        "type": "atlas",
+        "only": [
+          "ubuntu-virtualbox"
+        ],
+        "artifact": "{{user `org`}}/{{user `role`}}-ubuntu",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "virtualbox",
+          "version": "{{user `version`}}"
+        }
+      },
+      {
+        "token": "{{user `atlas_token`}}",
+        "type": "atlas",
+        "only": [
+          "centos-virtualbox"
+        ],
+        "artifact": "{{user `org`}}/{{user `role`}}-centos",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "provider": "virtualbox",
+          "version": "{{user `version`}}"
+        }
+      }
+    ]
   ],
   "push": {
     "name": "{{user `org`}}/{{user `role`}}",
@@ -421,6 +382,7 @@
       "Vagrantfile",
       "Vagrantfiles/*",
       "*.box",
+      "*.tar",
       "packer_cache/*",
       "output-*/*",
       "base-*/*",

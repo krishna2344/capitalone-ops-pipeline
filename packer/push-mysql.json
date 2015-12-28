@@ -1,13 +1,13 @@
 {
   "variables": {
     "atlas_token": "{{env `ATLAS_TOKEN`}}",
-    "version": "0.65",
+    "version": "0.68",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
     "org": "tompscanlan",
-    "role": "headless",
+    "role": "mysql",
     "memory": "512",
     "cpu": "1",
     "headless": "true",
@@ -291,31 +291,19 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[izanamee-{{user `role`}}]"
+        "role[{{user `role`}}]"
       ],
       "except": [
-        "alpine-docker",
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "chef-solo",
-      "cookbook_paths": [
-        "provision/chef/cookbooks",
-        "provision/chef/vendor-cookbooks"
-      ],
-      "data_bags_path": "provision/chef/data_bags",
-      "roles_path": "provision/chef/roles",
-      "run_list": [
-        "role[docker-izanamee-{{user `role`}}]"
-      ],
-      "only": [
-        "ubuntu-docker"
+        "alpine-docker"
       ]
     },
     {
       "type": "ansible-local",
-      "playbook_file": "provision/ansible/playbooks/local.yml",
+      "playbook_file": "provision/ansible/playbooks/{{user `role`}}.yml",
+      "playbook_dir": "provision/ansible/playbooks",
+      "role_paths": [
+        "provision/ansible/vendor-roles/{{user `role`}}"
+      ],
       "only": [
         "alpine-docker"
       ]
