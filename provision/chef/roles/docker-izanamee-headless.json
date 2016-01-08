@@ -49,7 +49,6 @@
     "recipe[java_install]",
     "recipe[user::data_bag]",
     "recipe[maven]",
-    "recipe[docker_install]",
     "recipe[nodejs]",
     "recipe[gradle]",
     "recipe[timezone_lwrp]",

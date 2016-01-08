@@ -1,3 +1,6 @@
+include_recipe 'firewall'
+include_recipe 'nodejs'
+include_recipe 'apache2'
 
 node['flamegraph']['packages'].each do |p|
   package p
@@ -26,29 +29,32 @@ web_app 'flamegraph' do
 end
 
 # don't do firewall stuff in docker
-#unless node['virtualization']['systems']['docker'] == 'guest'
-  firewall 'default'
-
-  firewall_rule 'ssh' do
-    port 22
-    protocol :tcp
-    action :allow
-  end
+unless ::File.exist?('/.dockerinit')
 
   # open standard http port to tcp traffic only; insert as first rule
   firewall_rule 'http' do
     port 80
     protocol :tcp
-    action :allow
+    command :allow
+    action :create
   end
-
 
   firewall_rule 'node.js' do
     port 3000
     protocol :tcp
-    action :allow
+    command :allow
+    action :create
   end
-#end
+
+  # when using firewalld, you must specify saving the rules.
+  if (node['os'] == 'rhel' || node['os'] == 'fedora') &&
+     node['platform_version'].to_f >= 7.0 &&
+     !node['firewall']['redhat7_iptables']
+    firewall do
+      action :save
+    end
+  end
+end
 
 nodejs_npm 'flamegraph-gui' do
   url 'github tompscanlan/flamegraph-gui'

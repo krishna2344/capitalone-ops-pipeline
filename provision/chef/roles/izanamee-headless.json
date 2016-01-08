@@ -42,19 +42,12 @@
       "oracle": {
         "accept_oracle_download_terms": true
       }
-    },
-    "firewall": {
-      "allow_ssh": true
-    },
-    "udev": {
-      "net": {
-        "eth0": "",
-        "eth1": ""
-      }
     }
   },
   "run_list": [
     "recipe[apt]",
+    "recipe[firewall_wrap]",
+    "recipe[nfs_wrap]",
     "recipe[java_install]",
     "recipe[user::data_bag]",
     "recipe[maven]",
@@ -62,8 +55,6 @@
     "recipe[nodejs]",
     "recipe[gradle]",
     "recipe[timezone_lwrp]",
-    "recipe[firewall::default]",
-    "recipe[configure_headless]",
-    "recipe[udev::net]"
+    "recipe[configure_headless]"
   ]
 }

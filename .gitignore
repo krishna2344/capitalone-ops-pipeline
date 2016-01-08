@@ -4,6 +4,7 @@
 .vagrant
 *.iml
 /provision/chef/vendor-cookbooks/
+/provision/ansible/vendor-roles
 /Berksfile.lock
 /Vagrantfile
 /packer_cache

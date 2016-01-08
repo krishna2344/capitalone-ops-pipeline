@@ -6,15 +6,29 @@ set -e
 
 cd ~
 
-if hostname | grep -q vmware; then
-	if [ -e "/etc/alpine-release" ]; then
-		sudo apk add open-vm-tools
-	elif which apt-get; then
-		sudo apt-get install -y open-vm-tools
+if [ -f /.dockerinit ]; then
+	# no host tools needed for docker
+	exit 0
+
+elif sudo virt-what | grep -q vmware; then
+	if which apt-get; then
+		sudo apt-get install -y git
+		git clone https://github.com/rasa/vmware-tools-patches.git
+		cd vmware-tools-patches
+		sudo ./patched-open-vm-tools.sh
 	elif which yum; then
-		sudo yum install -y open-vm-tools
+		sudo yum install -y git patch unzip fuse
+		git clone https://github.com/rasa/vmware-tools-patches.git
+		cd vmware-tools-patches
+		sudo ./patched-open-vm-tools.sh
 	fi
-elif hostname | grep -q virtualbox; then
+elif sudo virt-what | grep -q virtualbox; then
+	if which apt-get; then
+		sudo apt-get install -y build-essential linux-headers-$(uname -r)
+	elif which yum; then
+		sudo yum install -y gcc kernel-devel-$(uname -r) fuse
+	fi
+
 	mkdir xxx
 	sudo mount -oloop VBoxGuestAdditions*.iso xxx
 	cd xxx

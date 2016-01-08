@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+  - role: mysql
+    mysql_root_db_pass: changeme
+    mysql_db:
+    - name: test_db
+    mysql_users:

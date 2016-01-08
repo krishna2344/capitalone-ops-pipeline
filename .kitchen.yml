@@ -1,10 +1,8 @@
 ---
 driver:
   name: vagrant
-#  provider: vmware_fusion
-  provider: virtualbox
-  ssh:
-    pty: true
+  provider: vmware_fusion
+#  provider: virtualbox
   customize:
     memory: 1024
     natdnshostresolver1: 'on'
@@ -26,13 +24,22 @@ platforms:
   - name: centos
     driver:
       box: tompscanlan/headless-centos
+      gui: true
+    ssh:
+      pty: true
     run_list:
       - role[izanamee-headless]
   - name: ubuntu
     driver:
       box: tompscanlan/headless-ubuntu
+      gui: true
     run_list:
       - role[izanamee-headless]
+  - name: ubuntu-docker
+    driver:
+      name: docker
+      platform: ubuntu
+      image: jpetazzo/dind:latest
 
 suites:
   - name: mysql
@@ -40,7 +47,7 @@ suites:
       - centos
       - ubuntu
     run_list:
-      - role[mysql_wrap]
+      - role[mysql]
 
   - name: jenkins
     includes:
@@ -62,8 +69,13 @@ suites:
 
   - name: headless
     includes:
+      - ubuntu-docker
+    run_list:
+      - role[docker-izanamee-headless]
+
+  - name: headless
+    includes:
       - ubuntu
-      - docker
       - centos
     run_list:
       - role[izanamee-headless]
@@ -71,6 +83,5 @@ suites:
   - name: desktop
     includes:
       - ubuntu
-      - docker
     run_list:
       - role[izanamee-desktop]
