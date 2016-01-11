@@ -3,6 +3,7 @@ driver:
   name: vagrant
   provider: vmware_fusion
 #  provider: virtualbox
+  gui: false
   customize:
     memory: 1024
     natdnshostresolver1: 'on'
@@ -23,18 +24,12 @@ provisioner:
 platforms:
   - name: centos
     driver:
-      box: tompscanlan/headless-centos
-      gui: true
+      box: opspipeline/headless-centos
     ssh:
       pty: true
-    run_list:
-      - role[opspipeline-headless]
   - name: ubuntu
     driver:
-      box: tompscanlan/headless-ubuntu
-      gui: true
-    run_list:
-      - role[opspipeline-headless]
+      box: opspipeline/headless-ubuntu
   - name: ubuntu-docker
     driver:
       name: docker
@@ -46,6 +41,7 @@ suites:
     includes:
       - centos
       - ubuntu
+      - ubuntu-docker
     run_list:
       - role[mysql]
 

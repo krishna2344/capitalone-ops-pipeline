@@ -1,0 +1,36 @@
+---
+driver:
+  name: vagrant
+  provider: vmware_fusion
+#  provider: virtualbox
+  gui: true
+  customize:
+    memory: 1024
+    natdnshostresolver1: 'on'
+    natdnsproxy1: 'on'
+
+provisioner:
+
+platforms:
+  - name: mysql-centos
+    driver:
+      box: opspipeline/mysql-centos
+  - name: mysql-ubuntu
+    driver:
+      box: opspipeline/mysql-ubuntu
+  - name: headless-centos
+    driver:
+      box: opspipeline/headless-centos
+  - name: headless-ubuntu
+    driver:
+      box: opspipeline/headless-ubuntu
+
+suites:
+  - name: mysql
+    includes:
+      - mysql-centos
+      - mysql-ubuntu
+  - name: headless
+    includes:
+      - headless-centos
+      - headless-ubuntu

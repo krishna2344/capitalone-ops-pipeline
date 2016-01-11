@@ -1,29 +1,29 @@
 {
   "variables": {
+    "version": "0.90",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
-    "org": "tompscanlan",
+    "org": "opspipeline",
     "role": "headless",
-    "version": null,
     "memory": "512",
     "cpu": "1",
     "headless": "true",
-    "ami_ssh_username": "ubuntu",
+    "ami_ubuntu_ssh_username": "ubuntu",
+    "ami_centos_ssh_username": "centos",
     "ami_name": "{{user `org`}}/{{user `role`}} {{timestamp}}",
     "ami_instance_type": "t2.micro",
     "ami_region": "us-east-1",
     "ami_ubuntu_source": "ami-d05e75b8",
     "ami_rhel_source": "ami-08cb8762",
+    "ami_centos_source": "ami-61bbf104",
     "ami_vpc_id": "vpc-269c2542",
     "ami_security_group_id": "sg-a13db3c7",
     "ami_subnet_id": "subnet-f7d0ebdc",
     "disk_size": "20000",
     "ssh_username": "vagrant",
-    "ssh_password": "vagrant",
-    "ssh_keypair_name": "",
-    "ssh_private_key_file": "ec2.pem"
+    "ssh_password": "vagrant"
   },
   "builders": [
     {
@@ -33,12 +33,10 @@
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
       "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ami_ssh_username`}}",
+      "ssh_username": "{{user `ami_ubuntu_ssh_username`}}",
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
-      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-      "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
       "tags": {
         "OS_Version": "Ubuntu",
         "Release": "Latest"
@@ -46,58 +44,21 @@
     },
     {
       "name": "centos-ami",
+      "ssh_pty": true,
       "type": "amazon-ebs",
       "ami_name": "{{user `org`}}/centos-{{user `role`}} {{timestamp}}",
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
-      "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ssh_username`}}",
+      "source_ami": "{{user `ami_centos_source`}}",
+      "ssh_username": "{{user `ami_centos_ssh_username`}}",
+      "ssh_pty": true,
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
-      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-      "ssh_keypair_name": "{{{user `ssh_keypair_name`}}",
       "tags": {
-        "OS_Version": "Centos",
+        "OS_Version": "CentOS",
         "Release": "Latest"
       }
-    },
-    {
-      "name": "rhel-ami",
-      "type": "amazon-ebs",
-      "ami_name": "{{user `org`}}rhel-{{user `role`}} {{timestamp}}",
-      "instance_type": "{{user `ami_instance_type`}}",
-      "region": "{{user `ami_region`}}",
-      "source_ami": "{{user `ami_rhel_source`}}",
-      "ssh_username": "{{user `ssh_username`}}",
-      "vpc_id": "{{user `ami_vpc_id`}}",
-      "security_group_id": "{{user `ami_security_group_id`}}",
-      "subnet_id": "{{user `ami_subnet_id`}}",
-      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-      "ssh_keypair_name": "{{{user `ssh_keypair_name`}}",
-      "tags": {
-        "OS_Version": "RHEL",
-        "Release": "Latest"
-      }
-    },
-    {
-      "name": "ubuntu-docker",
-      "type": "docker",
-      "image": "ubuntu:trusty",
-      "commit": true
-    },
-    {
-      "name": "alpine-docker",
-      "type": "docker",
-      "image": "docker:dind",
-      "commit": true,
-      "run_command": [
-        "-d",
-        "-i",
-        "-t",
-        "{{.Image}}",
-        "/bin/sh"
-      ]
     },
     {
       "name": "ubuntu-virtualbox",
@@ -106,8 +67,8 @@
       "type": "virtualbox-ovf",
       "boot_wait": "10s",
       "source_path": "output-ubuntu-virtualbox/ubuntu-virtualbox-iso.ovf",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
@@ -135,8 +96,8 @@
       "output_directory": "output-ubuntu-vmware-vmx",
       "boot_wait": "10s",
       "source_path": "output-ubuntu-vmware/ubuntu-vmware-iso.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
@@ -151,17 +112,16 @@
       }
     },
     {
-      "communicator": "ssh",
-      "ssh_pty": true,
       "name": "centos-virtualbox",
       "vm_name": "centos-virtualbox",
       "type": "virtualbox-ovf",
       "output_directory": "output-centos-virtualbox-ovf",
       "boot_wait": "10s",
       "source_path": "output-centos-virtualbox/centos-virtualbox-iso.ovf",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
+      "ssh_pty": true,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
       "headless": "{{user `headless`}}",
@@ -182,17 +142,16 @@
       ]
     },
     {
-      "communicator": "ssh",
-      "ssh_pty": true,
       "name": "centos-vmware",
       "vm_name": "centos-vmware",
       "type": "vmware-vmx",
       "output_directory": "output-centos-vmware-vmx",
       "boot_wait": "10s",
       "source_path": "output-centos-vmware/centos-vmware-iso.vmx",
-      "ssh_username": "vagrant",
-      "ssh_password": "vagrant",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 22,
+      "ssh_pty": true,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh 'shutdown.sh'",
       "tools_upload_flavor": "linux",
@@ -204,6 +163,25 @@
         "numvcpus": "{{user `cpu`}}",
         "mks.3denable": false
       }
+    },
+    {
+      "name": "ubuntu-docker",
+      "type": "docker",
+      "image": "ubuntu:trusty",
+      "commit": true
+    },
+    {
+      "name": "alpine-docker",
+      "type": "docker",
+      "image": "docker:dind",
+      "commit": true,
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "{{.Image}}",
+        "/bin/sh"
+      ]
     }
   ],
   "provisioners": [
@@ -212,8 +190,7 @@
       "scripts": [
         "packer/scripts/base_setup.sh",
         "packer/scripts/vagrant.sh",
-        "packer/scripts/host_tools.sh",
-        "packer/scripts/clear_udev_rules.sh"
+        "packer/scripts/host_tools.sh"
       ],
       "environment_vars": [
         "http_proxy={{user `http_proxy`}}",
@@ -224,11 +201,16 @@
     },
     {
       "type": "shell",
-      "inline": [
-        "mkdir -p /packer-files"
+      "scripts": [
+        "packer/scripts/add_ansible.sh"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
       ],
       "only": [
-        "ubuntu-docker",
         "alpine-docker"
       ]
     },
@@ -250,7 +232,6 @@
         "recipe[chef_solo_proxy]"
       ],
       "except": [
-        "ubuntu-docker",
         "alpine-docker"
       ]
     },
@@ -265,22 +246,8 @@
       "run_list": [
         "role[opspipeline-{{user `role`}}]"
       ],
-      "only": [
-        "ubuntu-virtualbox",
-        "ubuntu-vmware",
-        "centos-virtualbox",
-        "centos-vmware",
-        "ubuntu-ami",
-        "centos-ami",
-        "rhel-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/base_docker_setup_ubuntu.sh"
-      ],
-      "only": [
+      "except": [
+        "alpine-docker",
         "ubuntu-docker"
       ]
     },
@@ -300,15 +267,6 @@
       ]
     },
     {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/alpine_docker_base.sh"
-      ],
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
       "type": "ansible-local",
       "playbook_file": "provision/ansible/playbooks/local.yml",
       "only": [
@@ -318,30 +276,13 @@
     {
       "type": "shell",
       "scripts": [
-        "packer/scripts/alpine_docker_clean.sh"
+        "packer/scripts/sanitize.sh"
       ],
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/ami_setup_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/shrink_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-vmware",
-        "ubuntu-virtualbox",
-        "ubuntu-ami"
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
       ]
     },
     {
@@ -362,72 +303,41 @@
         "recipe[chef_solo_proxy]"
       ],
       "except": [
-        "ubuntu-docker",
         "alpine-docker"
       ]
     }
   ],
   "post-processors": [
-    {
-      "type": "vagrant",
-      "output": "{{user `org`}}-{{user `role`}}-{{.BuildName}}-{{user `version`}}.box",
-      "keep_input_artifact": true,
-      "only": [
-        "centos-virtualbox",
-        "centos-vmware",
-        "ubuntu-virtualbox",
-        "ubuntu-vmware"
-      ]
-    },
-    {
-      "type": "docker-tag",
-      "repository": "{{user `org`}}/ubuntu-{{user `role`}}",
-      "tag": "{{user `version`}}",
-      "force": true,
-      "only": [
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "docker-save",
-      "path": "{{user `org`}}-ubuntu-{{user `role`}}-{{user `version`}}.tar",
-      "only": [
-        "ubuntu-docker"
-      ]
-    },
-    {
-      "type": "docker-tag",
-      "repository": "{{user `org`}}/alpine-{{user `role`}}",
-      "tag": "{{user `version`}}",
-      "force": true,
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
-      "type": "docker-save",
-      "path": "{{user `org`}}-alpine-{{user `role`}}-{{user `version`}}.tar",
-      "only": [
-        "alpine-docker"
-      ]
-    }
-  ],
-  "push": {
-    "name": "{{user `org`}}/{{user `role`}}",
-    "base_dir": "../",
-    "exclude": [
-      ".vagrant",
-      ".git",
-      "Vagrantfile",
-      "Vagrantfiles/*",
-      "*.box",
-      "packer_cache/*",
-      "output-*/*",
-      "base-*/*",
-      "jenkins",
-      ".kitchen/*",
-      ".vagrant/*",
-      "xxx/*"
+    [
+      {
+        "type": "vagrant",
+        "output": "{{user `org`}}-{{user `role`}}-{{.BuildName}}-{{user `version`}}.box",
+        "keep_input_artifact": true,
+        "only": [
+          "centos-virtualbox",
+          "centos-vmware",
+          "ubuntu-virtualbox",
+          "ubuntu-vmware"
+        ]
+      }
+    ],
+    [
+      {
+        "type": "docker-save",
+        "path": "{{user `org`}}-ubuntu-{{user `role`}}-{{user `version`}}.tar",
+        "only": [
+          "ubuntu-docker"
+        ]
+      }
+    ],
+    [
+      {
+        "type": "docker-save",
+        "path": "{{user `org`}}-alpine-{{user `role`}}-{{user `version`}}.tar",
+        "only": [
+          "alpine-docker"
+        ]
+      }
     ]
-  }
+  ]
 }

@@ -1,25 +1,26 @@
 {
   "variables": {
+    "version": "0.109",
     "atlas_token": "{{env `ATLAS_TOKEN`}}",
-    "version": "0.68",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
-    "org": "tompscanlan",
+    "org": "opspipeline",
     "role": "mysql",
     "memory": "512",
     "cpu": "1",
     "headless": "true",
-    "ami_ssh_username": "ubuntu",
+    "ami_ubuntu_ssh_username": "ubuntu",
+    "ami_centos_ssh_username": "centos",
     "ami_name": "{{user `org`}}/{{user `role`}} {{timestamp}}",
-    "ami_instance_type": "t2.micro",
-    "ami_region": "us-east-1",
-    "ami_ubuntu_source": "ami-d05e75b8",
-    "ami_rhel_source": "ami-08cb8762",
-    "ami_vpc_id": "vpc-269c2542",
-    "ami_security_group_id": "sg-a13db3c7",
-    "ami_subnet_id": "subnet-f7d0ebdc",
+    "ami_instance_type": "{{env `ami_instance_type`}}",
+    "ami_region": "{{env `ami_region`}}",
+    "ami_ubuntu_source": "{{env `ami_ubuntu_source`}}",
+    "ami_centos_source": "{{env `ami_centos_source`}}",
+    "ami_vpc_id": "{{env `ami_vpc_id`}}",
+    "ami_security_group_id": "{{env `ami_security_group_id`}}",
+    "ami_subnet_id": "{{env `ami_subnet_id`}}",
     "disk_size": "20000",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
@@ -32,7 +33,8 @@
     "docker_repo_username": "{{env `docker_repo_username`}}",
     "docker_repo_password": "{{env `docker_repo_password`}}",
     "docker_repo_server": "{{env `docker_repo_server`}}",
-    "docker_repo_email": "{{env `docker_repo_email`}}"
+    "docker_repo_email": "{{env `docker_repo_email`}}",
+    "chef_log_level": "{{env `chef_log_level`}}"
   },
   "builders": [
     {
@@ -42,7 +44,7 @@
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
       "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ami_ssh_username`}}",
+      "ssh_username": "{{user `ami_ubuntu_ssh_username`}}",
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
@@ -57,8 +59,9 @@
       "ami_name": "{{user `org`}}/centos-{{user `role`}} {{timestamp}}",
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
-      "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ami_ssh_username`}}",
+      "source_ami": "{{user `ami_centos_source`}}",
+      "ssh_username": "{{user `ami_centos_ssh_username`}}",
+      "ssh_pty": true,
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
@@ -233,11 +236,26 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline": [
+        "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+      ],
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "only": [
+        "ubuntu-ami",
+        "centos-ami"
+      ]
+    },
+    {
+      "type": "shell",
       "scripts": [
         "packer/scripts/base_setup.sh",
         "packer/scripts/vagrant.sh",
-        "packer/scripts/host_tools.sh",
-        "packer/scripts/clear_udev_rules.sh"
+        "packer/scripts/host_tools.sh"
       ],
       "environment_vars": [
         "http_proxy={{user `http_proxy`}}",
@@ -290,11 +308,35 @@
       ],
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
+      "execute_command": "{{if .Sudo}}sudo {{end}}chef-solo --no-color -l {{user `chef_log_level`}} -c {{.ConfigPath}} -j {{.JsonPath}}",
       "run_list": [
         "role[{{user `role`}}]"
       ],
       "except": [
-        "alpine-docker"
+        "alpine-docker",
+        "ubuntu-ami",
+        "centos-ami"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "provision/chef/cookbooks",
+        "provision/chef/vendor-cookbooks"
+      ],
+      "roles_path": "provision/chef/roles",
+      "execute_command": "{{if .Sudo}}sudo {{end}}chef-solo --no-color -l {{user `chef_log_level`}} -c {{.ConfigPath}} -j {{.JsonPath}}",
+      "run_list": [
+        "role[{{user `role`}}]"
+      ],
+      "json": {
+        "mysql_wrap": {
+          "start": false
+        }
+      },
+      "only": [
+        "centos-ami",
+        "ubuntu-ami"
       ]
     },
     {
@@ -306,45 +348,6 @@
       ],
       "only": [
         "alpine-docker"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/alpine_docker_clean.sh"
-      ],
-      "only": [
-        "alpine-docker"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/ami_setup_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/shrink_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-vmware",
-        "ubuntu-virtualbox",
-        "ubuntu-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/clear_udev_rules.sh"
-      ],
-      "only": [
-        "centos-vmware",
-        "centos-virtualbox"
       ]
     },
     {
@@ -467,6 +470,28 @@
     [
       {
         "type": "docker-tag",
+        "repository": "{{user `org`}}/ubuntu-{{user `role`}}",
+        "tag": "latest",
+        "force": true,
+        "only": [
+          "ubuntu-docker"
+        ]
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_email": "{{user `docker_repo_email`}}",
+        "login_username": "{{user `docker_repo_username`}}",
+        "login_password": "{{user `docker_repo_password`}}",
+        "login_server": "{{user `docker_repo_server`}}",
+        "only": [
+          "ubuntu-docker"
+        ]
+      }
+    ],
+    [
+      {
+        "type": "docker-tag",
         "repository": "{{user `org`}}/alpine-{{user `role`}}",
         "tag": "{{user `version`}}",
         "force": true,
@@ -488,6 +513,28 @@
       {
         "type": "docker-save",
         "path": "{{user `org`}}-alpine-{{user `role`}}-{{user `version`}}.tar",
+        "only": [
+          "alpine-docker"
+        ]
+      }
+    ],
+    [
+      {
+        "type": "docker-tag",
+        "repository": "{{user `org`}}/alpine-{{user `role`}}",
+        "tag": "latest",
+        "force": true,
+        "only": [
+          "alpine-docker"
+        ]
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_email": "{{user `docker_repo_email`}}",
+        "login_username": "{{user `docker_repo_username`}}",
+        "login_password": "{{user `docker_repo_password`}}",
+        "login_server": "{{user `docker_repo_server`}}",
         "only": [
           "alpine-docker"
         ]

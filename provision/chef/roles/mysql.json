@@ -6,6 +6,9 @@
   "default_attributes": {
   },
   "run_list": [
+    "recipe[apt]",
+    "recipe[firewall_wrap]",
+    "recipe[nfs_wrap]",
     "recipe[mysql_wrap]"
   ]
 }
