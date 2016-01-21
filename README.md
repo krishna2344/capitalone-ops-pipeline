@@ -130,7 +130,7 @@ within the ops-pipeline virtual machine.
 ## [Building target images](provision/README.md)
 
 # FAQ
-FAQs are hosted on our wiki at https://github.com/capitalone/ops-pipeline/wiki/FAQ
+FAQs are hosted [here](wiki/FAQ).
 
 # Acknowledgements
 
