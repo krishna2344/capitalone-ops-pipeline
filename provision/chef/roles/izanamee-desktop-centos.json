@@ -1,13 +1,13 @@
 {
-  "name": "izanamee-desktop-centos",
+  "name": "opspipeline-desktop-centos",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "The base role for a CentOS baseddesktop izanamee",
+  "description": "The base role for a CentOS baseddesktop opspipeline",
   "default_attributes": {
   },
   "run_list": [
     "recipe[apt::default]",
-    "role[izanamee-headless]",
+    "role[opspipeline-headless]",
     "recipe[xubuntu-desktop-pkg]",
     "recipe[spring_tool_suite]",
     "recipe[firefox]",

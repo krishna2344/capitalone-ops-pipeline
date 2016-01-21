@@ -13,7 +13,7 @@ verbose_logging=1
 
 stage 'checkout'
   node {
-    git url: 'git@github.com:capitalone/Izanamee.git', branch: 'add_centos', credentialsId: '1e13511b-a440-4850-870d-e06ab4b1e06e'
+    git url: 'git@github.com:capitalone/ops-pipeline.git', branch: 'add_centos', credentialsId: '1e13511b-a440-4850-870d-e06ab4b1e06e'
     stash includes: '**', excludes: '*.box,provision/chef/vendor-cookbooks/**,packer_cache/**,output-virtualbox-iso/**,output-vmware-iso/**,base-virtualbox/**,base-vmware/**,output-virtualbox-ovf/**,output-vmware-vmx/**', name: 'source'
   }
 

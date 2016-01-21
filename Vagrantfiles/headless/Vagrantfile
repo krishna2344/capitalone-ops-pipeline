@@ -4,7 +4,7 @@ script = <<SCRIPT
 SCRIPT
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'izanamee/headless'
+  config.vm.box = 'opspipeline/headless'
 
   # recommended system requirements
   #  these may be changed to suit the needs of your system

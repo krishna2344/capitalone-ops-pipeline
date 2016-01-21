@@ -2,7 +2,7 @@
   "name": "docker-builder",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "The base role for a headless izanamee",
+  "description": "The base role for a headless opspipeline",
   "default_attributes": {
 
     "packer": {
@@ -27,7 +27,7 @@
     }
   },
   "run_list": [
-    "role[docker-izanamee-headless]",
+    "role[docker-opspipeline-headless]",
     "recipe[packer]",
     "recipe[vagrant]",
     "recipe[virtualbox]",

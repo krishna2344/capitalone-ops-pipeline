@@ -1,4 +1,4 @@
-default['jenkins-master']['build-xml'] = 'izanamee-build.xml'
+default['jenkins-master']['build-xml'] = 'opspipeline-build.xml'
 default['jenkins-master']['admin_private_key'] = 'you should set this'
 default['jenkins-master']['admin_public_key'] = 'you should set this'
 default['jenkins-master']['admin_username'] = 'admin'
