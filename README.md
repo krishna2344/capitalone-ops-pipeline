@@ -10,7 +10,7 @@ Alpine) -- all with one set of scripts!
 The "one set of scripts" is a packer.json file to define the targets, and
 a ChefSolo role cookbook (or Ansible playbook) for the provisioning.
 
-We make liberal use of TestKitchen to drive bats and ServerSpec tests of
+We make liberal use of TestKitchen to drive [BATS](https://github.com/sstephenson/bats) and [ServerSpec](http://serverspec.org/) tests of
 image/container products.
 
 We take this one step further by defining a [builder](https://github.com/capitalone/ops-pipeline/blob/master/Vagrantfiles/builder/Vagrantfile)
