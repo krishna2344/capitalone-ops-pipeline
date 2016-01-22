@@ -28,13 +28,13 @@ platforms:
     ssh:
       pty: true
     run_list:
-      - role[izanamee-headless]
+      - role[opspipeline-headless]
   - name: ubuntu
     driver:
       box: tompscanlan/headless-ubuntu
       gui: true
     run_list:
-      - role[izanamee-headless]
+      - role[opspipeline-headless]
   - name: ubuntu-docker
     driver:
       name: docker
@@ -71,17 +71,17 @@ suites:
     includes:
       - ubuntu-docker
     run_list:
-      - role[docker-izanamee-headless]
+      - role[docker-opspipeline-headless]
 
   - name: headless
     includes:
       - ubuntu
       - centos
     run_list:
-      - role[izanamee-headless]
+      - role[opspipeline-headless]
 
   - name: desktop
     includes:
       - ubuntu
     run_list:
-      - role[izanamee-desktop]
+      - role[opspipeline-desktop]

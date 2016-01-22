@@ -42,7 +42,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "tompscanlan/izanamee-builder",
+        "repository": "tompscanlan/opspipeline-builder",
         "tag": "{{user `version`}}",
         "force": true
 

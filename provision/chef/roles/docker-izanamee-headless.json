@@ -1,8 +1,8 @@
 {
-  "name": "docker-izanamee-headless",
+  "name": "docker-opspipeline-headless",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "Identical to izanamee-headless, minus the docker recipe. Base on dind if you need docker in docker.",
+  "description": "Identical to opspipeline-headless, minus the docker recipe. Base on dind if you need docker in docker.",
   "default_attributes": {
     "apt": {
       "compiletime": true,

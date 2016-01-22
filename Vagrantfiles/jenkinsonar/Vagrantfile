@@ -2,7 +2,7 @@ cfg = {}
 cfg[:cpus]        ||= '2'
 cfg[:memory]      ||= '8096'
 cfg[:gui]         ||= false
-cfg[:box]         ||= 'izanamee/headless'
+cfg[:box]         ||= 'opspipeline/headless'
 cfg[:nfs]         ||= true
 
 Vagrant.configure(2) do |config|

@@ -1,1 +1,1 @@
-default['install_chrome']['homepage'] = 'https://github.com/capitalone/Izanamee'
+default['install_chrome']['homepage'] = 'https://github.com/capitalone/opspipeline'

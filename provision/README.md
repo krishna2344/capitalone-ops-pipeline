@@ -1,7 +1,7 @@
 
-# How to rebuild the Izanamee VMs
+# How to rebuild the opspipeline VMs
 
-There are 2 main ways to go about building more future Izanamee revisions.
+There are 2 main ways to go about building more future opspipeline revisions.
 
 1. Run builds manually
 1. Stand up a local VMware vm with tools to build the VMs and manage
@@ -58,7 +58,7 @@ You may need to install some of the following vagrant plugins to get everything 
 1. Stand up a VM with tools to package virtualbox and VMware vms
 
         $ # stand up a build server
-        $ git clone git@github.com:capitalone/Izanamee.git
+        $ git clone git@github.com:capitalone/opspipeline.git
         $ cp Vagrantfiles/builder/Vagrantfile .
         $ # the provider could also be vmware_workstation or vmware_appcatalyst for your OS
         $ vagrant up --provider=vmware_fusion
@@ -91,8 +91,8 @@ You may need to install some of the following vagrant plugins to get everything 
 
         # Add the boxes to your local setup.
         # Alternativly, upload them to a url internally (discussed below), or atlas.
-        vagrant box add --force --name izanamee/headless headless-vmware-iso-${version}.box
-        vagrant box add --force --name izanamee/headless headless-virtualbox-iso-${version}.box
+        vagrant box add --force --name opspipeline/headless headless-vmware-iso-${version}.box
+        vagrant box add --force --name opspipeline/headless headless-virtualbox-iso-${version}.box
 
 ## Leverage Atlas
 
@@ -110,7 +110,7 @@ Running `packer push` with those will run a buils remotely on atlas.
 
 1. clone source
 
-        git clone git@github.com:capitalone/Izanamee.git
+        git clone git@github.com:capitalone/opspipeline.git
 
 1. copy all chef recipes into place for shipping to atlas
 
@@ -130,21 +130,21 @@ to serve the following files and boxes at the correct urls.
 
 Write a catalog.json file similar to this.  Update version numbers, and checksums.
 
-      "name": "Izanamee",
-      "description": "Izanamee, based on ubuntu-14.04 LTS",
+      "name": "opspipeline",
+      "description": "opspipeline, based on ubuntu-14.04 LTS",
       "versions": [
           {
               "version": "0.1",
               "providers": [
                   {
                       "name": "virtualbox",
-                      "url": "http://reposerver.local/izanamee/headless-virtualbox-0.1.box",
+                      "url": "http://reposerver.local/opspipeline/headless-virtualbox-0.1.box",
                       "checksum_type": "sha1",
                       "checksum": "46841c18ebd41344cfb28409b2a9c5ff43ae1bf2"
                   },
                   {
                       "name": "vmware_desktop",
-                      "url": "http://reposerver.local/izanamee/headless-vmware-0.1.box",
+                      "url": "http://reposerver.local/opspipeline/headless-vmware-0.1.box",
                       "checksum_type": "sha1",
                       "checksum": "960d0dfe6fdb38a3a96f68128b2a01c096f6dc85"
                   }
@@ -155,13 +155,13 @@ Write a catalog.json file similar to this.  Update version numbers, and checksum
               "providers": [
                   {
                       "name": "virtualbox",
-                      "url": "http://reposerver.local/izanamee/headless-virtualbox-0.2.box",
+                      "url": "http://reposerver.local/opspipeline/headless-virtualbox-0.2.box",
                       "checksum_type": "sha1",
                       "checksum": "88122aa0dd3494cef7379d97d92d36d2d4d14ab1"
                   },
                   {
                       "name": "vmware_desktop",
-                      "url": "http://reposerver.local/izanamee/headless-vmware-0.2.box",
+                      "url": "http://reposerver.local/opspipeline/headless-vmware-0.2.box",
                       "checksum_type": "sha1",
                       "checksum": "a470e3ff5e30714cd8f5b9ffc0e5304d273675d1"
                   }
@@ -172,13 +172,13 @@ Write a catalog.json file similar to this.  Update version numbers, and checksum
               "providers": [
                   {
                       "name": "virtualbox",
-                      "url": "http://reposerver.local/izanamee/headless-virtualbox-iso-0.4.box",
+                      "url": "http://reposerver.local/opspipeline/headless-virtualbox-iso-0.4.box",
                       "checksum_type": "sha1",
                       "checksum": "ed130d4ca164b42db3575b439f361fbda3e9fa26"
                   },
                   {
                       "name": "vmware_desktop",
-                      "url": "http://reposerver.local/izanamee/headless-vmware-iso-0.4.box",
+                      "url": "http://reposerver.local/opspipeline/headless-vmware-iso-0.4.box",
                       "checksum_type": "sha1",
                       "checksum": "c0ec071e38ad5988a5ce502125c65c01be675379"
                   }
@@ -189,8 +189,8 @@ Write a catalog.json file similar to this.  Update version numbers, and checksum
 
 In your `Vagrantfile`, add the following:
 
-    config.vm.box = "izanamee/headless"
-    config.vm.box_url = "http://reposerver.local/izanamee/catalog.json"
+    config.vm.box = "opspipeline/headless"
+    config.vm.box_url = "http://reposerver.local/opspipeline/catalog.json"
 
 Now, initial vagrant up will download the latest version in the catalog.  You can also destroy
 and re-up with the latest version.
@@ -208,7 +208,7 @@ should get passing tets before committing the changes.
     kitchen verify virtualbox
 
 This iterates through upping, provisioning, and testing the headless and desktop
-Izanamee boxes for virtualbox provider.  The following commands do the same for the
+opspipeline boxes for virtualbox provider.  The following commands do the same for the
 vmware provider.
 
     kitchen converge vmware

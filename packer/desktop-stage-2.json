@@ -1,6 +1,6 @@
 {
   "variables": {
-    "box_name": "izanamee/desktop",
+    "box_name": "opspipeline/desktop",
     "iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.3-server-amd64.iso",
     "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
     "iso_checksum_type": "md5",
@@ -66,15 +66,15 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[izanamee-headless]",
-        "role[izanamee-desktop]"
+        "role[opspipeline-headless]",
+        "role[opspipeline-desktop]"
       ]
     }
   ],
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "izanamee-desktop-{{.BuildName}}-{{user `version`}}.box",
+      "output": "opspipeline-desktop-{{.BuildName}}-{{user `version`}}.box",
       "keep_input_artifact": true
     }
   ]

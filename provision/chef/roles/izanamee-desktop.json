@@ -1,8 +1,8 @@
 {
-  "name": "izanamee-desktop",
+  "name": "opspipeline-desktop",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "description": "The base role for a desktop izanamee",
+  "description": "The base role for a desktop opspipeline",
   "default_attributes": {
     "apt": {
       "compiletime": true,

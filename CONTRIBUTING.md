@@ -2,12 +2,12 @@
 We are currently in the midst of converting our Vagrant box build pipeline from
 custom build scripts with custom Ruby provisioners and Bash scripts to
 Hashicorp's Atlas build pipeline using [Packer](https://packer.io/) and
-[Chef-Solo Provisioning](https://www.packer.io/docs/provisioners/chef-solo.html).  
+[Chef-Solo Provisioning](https://www.packer.io/docs/provisioners/chef-solo.html).
 
 That being said, we are only able to accept pull requests at this time for
-functionality that is currently broken in our Izanamee boxes.  Once this
+functionality that is currently broken in our opspipeline boxes.  Once this
 migration has occured, we will be opening up contributions for new functionality
-in addition to bug fixes.  
+in addition to bug fixes.
 
 To contribute:
 

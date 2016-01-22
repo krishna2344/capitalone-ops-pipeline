@@ -1,25 +1,35 @@
-script = <<SCRIPT
-# insert any custom commands you want to run when you perform a 'vagrant up'
-#  this could be something like apt-get install ...
-SCRIPT
+cfg = {}
+cfg[:cpus] ||= '2'
+cfg[:memory] ||= '8096'
+cfg[:gui] ||= true
+cfg[:os] ||= 'centos'
+cfg[:role] ||= 'desktop'
+cfg[:org] ||= 'opspipeline'
+cfg[:hostname] ||= "#{cfg[:role]}-#{cfg[:os]}"
+cfg[:box] ||= "#{cfg[:org]}/#{cfg[:role]}-#{cfg[:os]}"
+cfg[:nfs] ||= true
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'izanamee/desktop'
+  config.vm.box = cfg[:box]
+  config.vm.synced_folder '.', '/vagrant', type: 'nfs' if cfg[:nfs]
 
-  # recommended system requirements
-  #  these may be changed to suit the needs of your system
-  config.vm.provider 'virtualbox' do |v|
-    v.memory = 8096
-    v.cpus = 2
-    v.gui = true
-    
-    # Uncomment to add video acceleration boost for GUI desktop
-    # v.customize ['modifyvm', :id, '--accelerate3d', 'on']
-    # v.customize ['modifyvm', :id, '--vram', '128']
-    
-    # Uncomment to add port-forwarding (Example NAT format for vb)
-    # v.customize ['modifyvm', :id, '--natpf1', '"myAppServer,tcp,,8080,,8080"']
+  config.vm.hostname = cfg[:hostname]
+  config.vm.define cfg[:hostname] do |vmconfig|
+    vmconfig.vm.provider 'vmware_fusion' do |v|
+      v.vmx['numvcpus'] = cfg[:cpus]
+      v.vmx['memsize']  = cfg[:memory]
+      v.gui = cfg[:gui]
+      v.vmx['vhv.enable'] = 'TRUE'
+    end
+
+    vmconfig.vm.provider 'vmware_appcatalyst' do |v|
+      v.vmx['numvcpus'] = cfg[:cpus]
+      v.vmx['memsize']  = cfg[:memory]
+      v.gui = 'false'
+      v.vmx['vhv.enable'] = 'TRUE'
+    end
   end
 
-  config.vm.provision 'shell', inline: script
+  # Uncomment to add port-forwarding
+  #config.vm.network "forwarded_port", guest: 2003, host: 12003, protocol: "tcp"
 end

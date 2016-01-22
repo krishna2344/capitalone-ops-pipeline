@@ -3,7 +3,7 @@ cfg = {}
 cfg[:cpus]        ||= "2"
 cfg[:memory]      ||= "4096"
 cfg[:gui]         ||= false
-cfg[:box]         ||= "izanamee/headless"
+cfg[:box]         ||= "opspipeline/headless-ubuntu"
 cfg[:nfs]         ||= true
 
 Vagrant.configure(2) do |config|
@@ -42,6 +42,6 @@ Vagrant.configure(2) do |config|
     chef.roles_path = 'provision/chef/roles'
     chef.data_bags_path = "provision/chef/data_bags"
     chef.add_role 'jenkins-master'
-    chef.add_role 'izanamee-headless'
+    chef.add_role 'opspipeline-headless'
   end
 end

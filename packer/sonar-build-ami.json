@@ -1,6 +1,6 @@
 {
   "variables": {
-    "box_name": "izanamee/sonar-build",
+    "box_name": "opspipeline/sonar-build",
     "ami_name": "{{user `box_name`}} {{timestamp}}",
     "instance_type": "t2.micro",
     "region": "us-east-1",

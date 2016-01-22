@@ -3,7 +3,7 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] ||= 'docker'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.define "izanamee-headless" do |app|
+  config.vm.define "opspipeline-headless" do |app|
     app.vm.provider "docker" do |d|
       d.image = "tompscanlan/docker-headless-alpine:0.6"
       d.cmd = ["sleep", "10000"]

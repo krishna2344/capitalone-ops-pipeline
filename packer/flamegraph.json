@@ -145,7 +145,7 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[izanamee-headless]",
+        "role[opspipeline-headless]",
         "role[{{user `role`}}]"
       ],
       "only": [
@@ -162,7 +162,7 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[izanamee-headless-centos]",
+        "role[opspipeline-headless-centos]",
         "role[{{user `role`}}]"
       ],
       "only": [
@@ -188,7 +188,7 @@
       "data_bags_path": "provision/chef/data_bags",
       "roles_path": "provision/chef/roles",
       "run_list": [
-        "role[docker-izanamee-headless]",
+        "role[docker-opspipeline-headless]",
         "role[{{user `role`}}]"
       ],
       "only": [

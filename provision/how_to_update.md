@@ -1,6 +1,6 @@
 # How to update this readme in the next build
 
-This document is intended to show the process of making a change to the Izanamee repository, and getting a box that contains that change. If you step through this process, you should see a smiley face here []
+This document is intended to show the process of making a change to the opspipeline repository, and getting a box that contains that change. If you step through this process, you should see a smiley face here []
 
 ## Making a change
 
@@ -8,8 +8,8 @@ The change we want to make, is to add a fun happy smiley face into the first par
 
 I'm assuming you already checked out the source, but if not, go ahead and do a
 
-    git clone git@github.com:capitalone/Izanamee.git
-    cd Izanamee
+    git clone git@github.com:capitalone/ops-pipeline.git
+    cd ops-pipeline
     # start a new branch
     git branch more_fun
     git checkout more_fun
@@ -42,10 +42,10 @@ Read the [provisioning readme](README.md) to learn how to setup a build machine,
 
 The artifacts from the build will be two *.box files.  Use the [normal vagrant procedure for adding the box](https://docs.vagrantup.com/v2/getting-started/boxes.html) into your local vagrant instance.
 
-Add it with the box name `izanamee/headless`
+Add it with the box name `opspipeline/headless`
 
 ## Boot it, and verify
 
-    vagrant init izanamee/headless
+    vagrant init opspipeline/headless
     vagrant up --provider vmware_desktop
     vagrant ssh
