@@ -3,34 +3,33 @@
 
 ## Vagrant Boxes:
 
-* tompscanlan/headless-ubuntu
-* tompscanlan/mysql-centos
-* tompscanlan/mysql-ubuntu
-* tompscanlan/headless-centos
-* tompscanlan/flamegraph-ubuntu
-* tompscanlan/chaperone-ubuntu
-* tompscanlan/flamegraph-centos
-* tompscanlan/desktop-ubuntu
-* tompscanlan/headless
-* tompscanlan/desktop
+* opspipeline/headless-ubuntu
+* opspipeline/mysql-centos
+* opspipeline/mysql-ubuntu
+* opspipeline/headless-centos
+* opspipeline/flamegraph-ubuntu
+* opspipeline/flamegraph-centos
+* opspipeline/desktop-ubuntu
+* opspipeline/headless
+* opspipeline/desktop
 
 ```bash
-vagrant init tompscanlan/headless-centos; vagrant up
+vagrant init opspipeline/headless-centos; vagrant up
 ```
 
 ## Docker images:
-* tompscanlan/alpine-mysql
-* tompscanlan/ubuntu-mysql
-* tompscanlan/ubuntu-headless
-* tompscanlan/alpine-headless
+* opspipeline/alpine-mysql
+* opspipeline/ubuntu-mysql
+* opspipeline/ubuntu-headless
+* opspipeline/alpine-headless
 
 ``` bash
-docker run -it  tompscanlan/ubuntu-headless /bin/bash
+docker run -it  opspipeline/ubuntu-headless /bin/bash
 root@fde2ab82b772:/# /usr/local/maven-3.3.3/bin/mvn -v
 root@fde2ab82b772:/# exit
 
 
-docker run -it tompscanlan/ubuntu-mysql:latest /bin/bash
+docker run -it opspipeline/ubuntu-mysql:latest /bin/bash
 root@5792cd9b8546:/# openrc
 root@5792cd9b8546:/# /etc/init.d/mariadb start
 root@3875a77efb89:/# echo "show tables;" | mysql mysql

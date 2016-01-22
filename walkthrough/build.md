@@ -6,8 +6,8 @@
 You can build locally using the same packer template as used to build on Atlas.  One issue with doing so is that the post processors upload vms and docker images totaling many GB to docker hub and Atlas, which will generally not be good for your pipes. Use *packer/headless.json* to generate artifacts, but not upload them.
 
 ```
-git clone https://github.com/capitalone/Izanamee.git izanamee
-cd izanamee
+git clone https://github.com/capitalone/ops-pipeline.git ops-pipeline
+cd ops-pipeline
 
 export docker_repo_username=username
 export docker_repo_password=password

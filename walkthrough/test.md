@@ -18,8 +18,8 @@ gem install test-kitchen
 
 ## Running existing tests
 ```
-git clone https://github.com/capitalone/Izanamee.git izanamee
-cd izanamee
+git clone https://github.com/capitalone/ops-pipeline.git ops-pipeline
+cd ops-pipeline
 kitchen list
 kitchen converge headless
 kitchen verify headless
