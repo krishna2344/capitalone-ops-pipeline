@@ -93,29 +93,27 @@ begin using the Ops-Pipeline family of virtual machines:
   ```
 
 # Using the Ops-Pipeline Virtual Machines
-The recommended pattern for installing and using an ops-pipeline virtual machine is
-to copy the provided Vagrantfile into the base of your own GitHub repository.
+The recommended pattern for retrieving and using an ops-pipeline virtual machine is
+to clone or fork this repository, copy and tune one of the provided Vagrantfiles into
+the base of your own GitHub repository.
 
 1. Create a GitHub repository
-2. Execute the steps below substituting _ghuser_ with your GitHub
-   username and _your_repo_ with the name of the repository you created:
 
+   ``` bash
+   git clone https://github.com/capitalone/ops-pipeline.git
+   cd ops-pipline
    ```
-   $ git clone https://github.com/ghuser/your_repo.git
-   $ cd your_repo
 
-   $ # if you want to use the headless image, execute the following
-   $ curl -O https://raw.githubusercontent.com/capitalone/ops-pipeline/master/Vagrantfiles/headless/Vagrantfile -o Vagrantfile
+1. Copy and tune one of the existing Vagrantfiles
 
-   $ # if you want to use the desktop image, execute the following
-   $ curl -O https://raw.githubusercontent.com/capitalone/ops-pipeline/master/Vagrantfiles/desktop/Vagrantfile -o Vagrantfile
+   ``` bash
+   # get a list of example vagrant files:
+   ls Vagrantfiles
 
-   $ vagrant up
-   $ vagrant ssh
+   # chose to consume the headless image:
+   cp Vagrantfiles/headless/Vagrantfile .
+   # edit Vagrantfile to tune any parameters
    ```
-3. If you have chosen the desktop image, the login credentials for the GUI are
-   username: `vagrant` and password: `vagrant`.
-
 The Vagrantfile goes into the base of your project because Vagrant will sync the
 current working directory to the `/vagrant` directory inside of the ops-pipeline
 Virtual Machine.  This means you can continue to work on files on your host
@@ -123,7 +121,26 @@ machine and they will automatically be available within the ops-pipeline virtual
 machine.  This is especially useful in the case of working on the headless
 image as you can continue to use GUI IDEs for development.  Additionally, you
 can execute `git` commands and they will work the same on your host machine and
-within the ops-pipeline virtual machine.
+within the ops-pipeline virtual machine.  See a demonstration of that shared directoy
+in the following step
+
+1. Boot the VM and explore
+   ``` bash
+   vagrant up
+   # if using nfs in the vagrant file, you may need to enter your root password
+   vagrant ssh
+
+   [vagrant@headless-centos ~]$ cd /vagrant/
+   Last login: Thu Jan 21 13:35:44 2016 from 192.168.41.1
+   [vagrant@headless-centos ~]$ cd /vagrant/
+   [vagrant@headless-centos vagrant]$ ls
+   ansible.cfg  Berksfile  Berksfile.lock  CHANGELOG.md  CONTRIBUTING.md  galaxy.yml  inv  LICENSE  packer  provision  README.md  test  Vagrantfile  Vagrantfiles
+   [vagrant@headless-centos vagrant]$
+
+   ```
+
+*If you have chosen the desktop image, the login credentials for the GUI are
+   username: `vagrant` and password: `vagrant`.*
 
 # Additional Documentation
 ## [Adding a new use case into ops-pipeline](Vagrantfiles/README.md)

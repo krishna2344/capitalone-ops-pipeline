@@ -4,6 +4,7 @@ Lets walk through adding a new use case on top of opspipeline.  We'll start from
 
 ## decide which base to use
 [`opspipeline/headless`](https://atlas.hashicorp.com/opspipeline/boxes/headless) or [`opspipeline/desktop`](https://atlas.hashicorp.com/opspipeline/boxes/desktop) will be the best choices for base boxes.
+Alternativly, if you want to head f on your own, there is no need to base your role on either of these.
 
 We'll start from headless, but the process is the same for starting on desktop.
 
