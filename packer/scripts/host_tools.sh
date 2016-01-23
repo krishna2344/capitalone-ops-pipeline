@@ -16,11 +16,15 @@ elif sudo virt-what | grep -q vmware; then
 		git clone https://github.com/rasa/vmware-tools-patches.git
 		cd vmware-tools-patches
 		sudo ./patched-open-vm-tools.sh
+		cd ..
+		sudo rm -rf vmware-tools-patches
 	elif which yum; then
 		sudo yum install -y git patch unzip fuse
 		git clone https://github.com/rasa/vmware-tools-patches.git
 		cd vmware-tools-patches
 		sudo ./patched-open-vm-tools.sh
+		cd ..
+		sudo rm -rf vmware-tools-patches
 	fi
 elif sudo virt-what | grep -q virtualbox; then
 	if which apt-get; then
@@ -38,4 +42,5 @@ elif sudo virt-what | grep -q virtualbox; then
 	cd ..
 	sudo umount xxx
 	rmdir xxx
+	sudo rm -f VBoxGuestAdditions*.iso
 fi

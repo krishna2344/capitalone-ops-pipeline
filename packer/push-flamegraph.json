@@ -1,7 +1,7 @@
 {
   "variables": {
+    "version": "0.80",
     "atlas_token": "{{env `ATLAS_TOKEN`}}",
-    "version": "0.73",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "ftp_proxy": "{{env `ftp_proxy`}}",
@@ -11,12 +11,14 @@
     "memory": "512",
     "cpu": "1",
     "headless": "true",
-    "ami_ssh_username": "ubuntu",
+    "ami_ubuntu_ssh_username": "ubuntu",
+    "ami_centos_ssh_username": "centos",
     "ami_name": "{{user `org`}}/{{user `role`}} {{timestamp}}",
     "ami_instance_type": "t2.micro",
     "ami_region": "us-east-1",
     "ami_ubuntu_source": "ami-d05e75b8",
     "ami_rhel_source": "ami-08cb8762",
+    "ami_centos_source": "ami-61bbf104",
     "ami_vpc_id": "vpc-269c2542",
     "ami_security_group_id": "sg-a13db3c7",
     "ami_subnet_id": "subnet-f7d0ebdc",
@@ -42,7 +44,7 @@
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
       "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ami_ssh_username`}}",
+      "ssh_username": "{{user `ami_ubuntu_ssh_username`}}",
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
@@ -57,8 +59,9 @@
       "ami_name": "{{user `org`}}/centos-{{user `role`}} {{timestamp}}",
       "instance_type": "{{user `ami_instance_type`}}",
       "region": "{{user `ami_region`}}",
-      "source_ami": "{{user `ami_ubuntu_source`}}",
-      "ssh_username": "{{user `ami_ssh_username`}}",
+      "source_ami": "{{user `ami_centos_source`}}",
+      "ssh_username": "{{user `ami_centos_ssh_username`}}",
+      "ssh_pty": true,
       "vpc_id": "{{user `ami_vpc_id`}}",
       "security_group_id": "{{user `ami_security_group_id`}}",
       "subnet_id": "{{user `ami_subnet_id`}}",
@@ -217,8 +220,7 @@
       "scripts": [
         "packer/scripts/base_setup.sh",
         "packer/scripts/vagrant.sh",
-        "packer/scripts/host_tools.sh",
-        "packer/scripts/clear_udev_rules.sh"
+        "packer/scripts/host_tools.sh"
       ],
       "environment_vars": [
         "http_proxy={{user `http_proxy`}}",
@@ -255,36 +257,6 @@
       "roles_path": "provision/chef/roles",
       "run_list": [
         "role[{{user `role`}}]"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/ami_setup_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/shrink_ubuntu.sh"
-      ],
-      "only": [
-        "ubuntu-vmware",
-        "ubuntu-virtualbox",
-        "ubuntu-ami"
-      ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "packer/scripts/clear_udev_rules.sh"
-      ],
-      "only": [
-        "centos-vmware",
-        "centos-virtualbox"
       ]
     },
     {

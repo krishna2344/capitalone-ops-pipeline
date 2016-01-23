@@ -28,20 +28,24 @@ template '/home/vagrant/.m2/settings.xml' do
   mode '0755'
 end
 
-group 'docker' do
-  action :create
-  append true
-  members 'vagrant'
-  notifies :restart, 'service[docker]'
-end
+# prevent restart under centos
+case node[:platform]
+when 'ubuntu', 'debian'
+  group 'docker' do
+    action :create
+    append true
+    members 'vagrant'
+    notifies :restart, 'service[docker]'
+  end
 
-group 'vboxsf' do
-  action :create
-  append true
-  members 'vagrant'
-  notifies :restart, 'service[docker]'
-end
+  group 'vboxsf' do
+    action :create
+    append true
+    members 'vagrant'
+    notifies :restart, 'service[docker]'
+  end
 
-service 'docker' do
-  action :nothing
+  service 'docker' do
+    action :nothing
+  end
 end

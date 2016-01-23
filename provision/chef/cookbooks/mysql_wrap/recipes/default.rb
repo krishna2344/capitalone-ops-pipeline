@@ -1,8 +1,16 @@
-mysql_service 'mysqld' do
-  port node['mysql_wrap']['port']
-  version node['mysql_wrap']['version']
-  initial_root_password node['mysql_wrap']['admin_password']
-  action [:create, :start]
+if node['mysql_wrap']['create']
+  mysql_service 'mysqld' do
+    port node['mysql_wrap']['port']
+    version node['mysql_wrap']['version']
+    initial_root_password node['mysql_wrap']['admin_password']
+    action :create
+  end
+end
+
+if node['mysql_wrap']['start']
+  mysql_service 'mysqld' do
+    action :start
+  end
 end
 
 # open mysql port in firewall
