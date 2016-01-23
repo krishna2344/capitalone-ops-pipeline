@@ -39,7 +39,7 @@ to Packer and CM tools as stated above.
 
 The currently supported images are [here](packer/README.md)
 
-For specifics on package versions, please visit the [Release History](releases).
+For specifics on package versions, please visit the [Release History](https://github.com/capitalone/Izanamee/releases).
 
 # Host System Requirements
 
@@ -122,7 +122,7 @@ machine.  This is especially useful in the case of working on the headless
 image as you can continue to use GUI IDEs for development.  Additionally, you
 can execute `git` commands and they will work the same on your host machine and
 within the ops-pipeline virtual machine.  See a demonstration of that shared directoy
-in the following step
+in the following step.
 
 1. Boot the VM and explore
    ``` bash
@@ -147,7 +147,7 @@ in the following step
 ## [Building target images](provision/README.md)
 
 # FAQ
-FAQs are hosted [here](wiki/FAQ).
+FAQs are hosted [here](https://github.com/capitalone/Izanamee/wiki/FAQ).
 
 # Acknowledgements
 
