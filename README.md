@@ -37,7 +37,7 @@ to Packer and CM tools as stated above.
 
 # Ops-Pipeline Family of Virtual Machines
 
-The currently supported images are [here](packer/README.md)
+The currently supported images are described [here](packer/README.md).
 
 For specifics on package versions, please visit the [Release History](https://github.com/capitalone/Izanamee/releases).
 
