@@ -39,7 +39,7 @@ to Packer and CM tools as stated above.
 
 The currently supported images are described [here](packer/README.md).
 
-For specifics on package versions, please visit the [Release History](https://github.com/capitalone/Izanamee/releases).
+For specifics on package versions, please visit the [Release History](https://github.com/capitalone/ops-pipeline/releases).
 
 # Host System Requirements
 
@@ -147,7 +147,7 @@ in the following step.
 ## [Building target images](provision/README.md)
 
 # FAQ
-FAQs are hosted [here](https://github.com/capitalone/Izanamee/wiki/FAQ).
+FAQs are hosted [here](https://github.com/capitalone/ops-pipeline/wiki).
 
 # Acknowledgements
 
