@@ -7,3 +7,4 @@ This file is used to list changes made in opspipeline.
 -----
 - initial release of opspipeline, with headless and desktop boxes pushed to [The
   opspipeline Repository at Atlas](https://atlas.hashicorp.com/opspipeline)
+ 

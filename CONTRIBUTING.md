@@ -19,3 +19,4 @@ To contribute:
     automating your tests following our migration.
 6. Run the tests, ensuring they all pass
 7. Submit a Pull Request with your tests using GitHub
+ 
